@@ -1,0 +1,16 @@
+{
+  "short_name": "Calendari",
+  "name": "Calendari Laboral Personal",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2370/2370264.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1976D2",
+  "background_color": "#F4F6F9"
+}
