@@ -131,7 +131,7 @@
     <div class="ctrl-group">
       <div class="switch-row">
         <label class="toggle">
-          <input type="checkbox" id="chk-fons" checked onchange="actualitzarControls()">
+          <input type="checkbox" id="chk-fons" onchange="actualitzarControls()">
           <div class="toggle-track"></div><div class="toggle-thumb"></div>
         </label>
         <span class="sw-label">Modificar</span>
@@ -142,7 +142,7 @@
     <div class="ctrl-group">
       <div class="switch-row">
         <label class="toggle">
-          <input type="checkbox" id="chk-text" checked onchange="actualitzarControls()">
+          <input type="checkbox" id="chk-text" onchange="actualitzarControls()">
           <div class="toggle-track"></div><div class="toggle-thumb"></div>
         </label>
         <span class="sw-label">C. laboral</span>
@@ -176,6 +176,11 @@
   <div class="card-title" style="margin-top:4px">Comptadors per color</div>
   <div id="comptadors-llista"></div>
   <hr class="dv">
+  <div class="accio-row" style="margin-bottom:10px">
+    <button class="btn-accio" style="background:#C8E6C9;color:#1B5E20" onclick="exportarBackup()">💾 Exportar còpia</button>
+    <button class="btn-accio" style="background:#BBDEFB;color:#0D47A1" onclick="document.getElementById('inp-backup').click()">📂 Importar còpia</button>
+    <input type="file" id="inp-backup" accept=".json" style="display:none" onchange="importarBackup(event)">
+  </div>
   <div class="accio-row">
     <button class="btn-accio btn-esborrar" onclick="confirmarEsborrarMes()">🗑 Esborra el mes</button>
     <button class="btn-accio btn-reset"    onclick="confirmarReset()">💥 Reset total</button>
@@ -522,6 +527,50 @@ function confirmarReset(){
     desarTot(); mostrarMissatge('✓ Memòria esborrada'); renderTot();
   },true);
 }
+
+// ── Còpia de seguretat ──
+function exportarBackup() {
+  const dades = {
+    versio: 1,
+    data_exportacio: new Date().toISOString(),
+    calendari_personal: memoria,
+    comptadors_colors: comptadors
+  };
+  const blob = new Blob([JSON.stringify(dades, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const ara = new Date();
+  const nom = `backup_calendari_${ara.getFullYear()}${String(ara.getMonth()+1).padStart(2,'0')}${String(ara.getDate()).padStart(2,'0')}.json`;
+  a.href = url; a.download = nom; a.click();
+  URL.revokeObjectURL(url);
+  mostrarMissatge('✓ Còpia exportada');
+}
+
+function importarBackup(event) {
+  const fitxer = event.target.files[0];
+  if (!fitxer) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const dades = JSON.parse(e.target.result);
+      if (!dades.calendari_personal || !dades.comptadors_colors) throw new Error('Format invàlid');
+      obrirModal(
+        'Importar còpia de seguretat',
+        `Vols restaurar la còpia del ${dades.data_exportacio ? new Date(dades.data_exportacio).toLocaleDateString('ca-ES') : 'fitxer seleccionat'}? Les dades actuals es sobreescriuran.`,
+        () => {
+          memoria = dades.calendari_personal;
+          comptadors = dades.comptadors_colors;
+          desarTot(); mostrarMissatge('✓ Còpia restaurada'); renderTot();
+        }, false
+      );
+    } catch(err) {
+      mostrarMissatge('✗ Fitxer no vàlid');
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(fitxer);
+}
+
 
 let _mt=null;
 function mostrarMissatge(txt){
