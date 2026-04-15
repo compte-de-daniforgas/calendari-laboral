@@ -583,6 +583,26 @@ function renderTot(){ renderCalendari(); renderRegistre(); renderComptadors(); }
 
 pintarBadgeFons(); pintarBadgeText(); pintarDisplayValor(); actualitzarControls(); renderTot();
 
+// ── Swipe per canviar de mes ──
+let touchStartX = 0;
+let touchStartY = 0;
+
+document.addEventListener('touchstart', e => {
+  touchStartX = e.touches[0].clientX;
+  touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  const dy = e.changedTouches[0].clientY - touchStartY;
+
+  // Només actua si el moviment horitzontal és dominant i prou gran
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+    if (dx < 0) canviarMes(1);   // llisca esquerra → mes següent
+    else        canviarMes(-1);  // llisca dreta → mes anterior
+  }
+}, { passive: true });
+
 </script>
 </body>
 </html>
