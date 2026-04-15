@@ -582,6 +582,39 @@ function mostrarMissatge(txt){
 function renderTot(){ renderCalendari(); renderRegistre(); renderComptadors(); }
 
 pintarBadgeFons(); pintarBadgeText(); pintarDisplayValor(); actualitzarControls(); renderTot();
+
+// --- LÒGICA PER CANVIAR DE MES LLISCANT EL DIT (SWIPE) ---
+
+let touchstartX = 0;
+let touchendX = 0;
+
+// On es detecta el gest (normalment sobre la card del calendari o tota la pantalla)
+const areaGestos = document.body; 
+
+areaGestos.addEventListener('touchstart', e => {
+    touchstartX = e.changedTouches[0].screenX;
+}, {passive: true});
+
+areaGestos.addEventListener('touchend', e => {
+    touchendX = e.changedTouches[0].screenX;
+    processarGest();
+}, {passive: true});
+
+function processarGest() {
+    const llindar = 50; // Distància mínima en píxels per considerar-ho un gest
+    
+    // Si llisquem cap a l'esquerra (el dit es mou cap a <--) anem al mes següent
+    if (touchendX < touchstartX - llindar) {
+        canviarMes(1);
+        mostrarMissatge("Mes següent");
+    }
+    
+    // Si llisquem cap a la dreta (el dit es mou cap a -->) anem al mes anterior
+    if (touchendX > touchstartX + llindar) {
+        canviarMes(-1);
+        mostrarMissatge("Mes anterior");
+    }
+}
 </script>
 </body>
 </html>
