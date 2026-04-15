@@ -583,44 +583,6 @@ function renderTot(){ renderCalendari(); renderRegistre(); renderComptadors(); }
 
 pintarBadgeFons(); pintarBadgeText(); pintarDisplayValor(); actualitzarControls(); renderTot();
 
-// --- LÒGICA PER CANVIAR DE MES LLISCANT EL DIT (SWIPE) ---
-
-// Esperem que la pàgina estigui totalment carregada
-window.addEventListener('load', function() {
-    let touchstartX = 0;
-    let touchendX = 0;
-
-    // Seleccionem només la zona del calendari per evitar canvis accidentals 
-    // quan fem scroll vertical a la resta de la pàgina
-    const areaGestos = document.querySelector('.card'); 
-
-    if (areaGestos) {
-        areaGestos.addEventListener('touchstart', e => {
-            touchstartX = e.changedTouches[0].screenX;
-        }, {passive: true});
-
-        areaGestos.addEventListener('touchend', e => {
-            touchendX = e.changedTouches[0].screenX;
-            processarGest();
-        }, {passive: true});
-    }
-
-    function processarGest() {
-        const llindar = 60; // Sensibilitat (píxels mínims)
-        
-        // Lliscar cap a l'esquerra (Dits cap a <--) -> Mes Següent
-        if (touchendX < touchstartX - llindar) {
-            canviarMes(1);
-        }
-        
-        // Lliscar cap a la dreta (Dits cap a -->) -> Mes Anterior
-        if (touchendX > touchstartX + llindar) {
-            canviarMes(-1);
-        }
-    }
-    
-    console.log("Sistema de gestos activat sobre la card del calendari");
-});
 </script>
 </body>
 </html>
