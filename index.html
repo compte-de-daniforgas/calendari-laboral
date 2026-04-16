@@ -1,12 +1,9 @@
-<!DOCTYPE html
+<!DOCTYPE html>
 <html lang="ca">
 <head>
-<link rel="manifest" href="manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Calendari Laboral">
+<link rel="manifest" href="manifest.json">
 <title>Calendari Laboral</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -15,17 +12,16 @@
     --text:#1A1A2E; --text-muted:#6B7280; --border:#E5E7EB;
     --shadow:0 2px 12px rgba(0,0,0,0.08); --radius:16px; --radius-sm:10px;
   }
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:16px;padding-bottom:40px}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent; touch-action: manipulation;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:16px;padding-bottom:40px; overflow-x: hidden;}
   h1{font-size:22px;font-weight:700;color:var(--primary);text-align:center;margin-bottom:16px}
-  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:12px; touch-action: pan-y;}
   .card-title{font-size:14px;font-weight:700;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px}
 
   /* NAV */
   .nav-mes{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
   .nav-mes h2{font-size:18px;font-weight:700}
   .nav-btn{background:none;border:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--primary);cursor:pointer}
-  .nav-btn:active{background:var(--primary-light)}
   .btn-avui{font-size:13px;font-weight:600;color:var(--primary);background:var(--primary-light);border:none;border-radius:20px;padding:6px 14px;cursor:pointer}
 
   /* CALENDARI */
@@ -33,91 +29,69 @@
   .cal-cap{text-align:center;font-size:11px;font-weight:700;color:var(--text-muted);padding:4px 0}
   .cal-cap.ds{color:#F9A825} .cal-cap.dg{color:#E53935}
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-  .dia-btn{aspect-ratio:1;border-radius:var(--radius-sm);border:none;background:#F5F5F5;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:2px;padding:0;transition:transform .1s,filter .1s}
-  .dia-btn:active{transform:scale(0.92);filter:brightness(0.9)}
+  .dia-btn{aspect-ratio:1;border-radius:var(--radius-sm);border:none;background:#F5F5F5;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;gap:2px;padding:0}
   .dia-btn.buit{pointer-events:none;background:transparent}
-  .dia-num{font-size:13px;font-weight:700;line-height:1}
+  .dia-num{font-size:13px;font-weight:700}
   .dia-punt{width:5px;height:5px;border-radius:50%;background:#E53935}
   .dia-punt.inv{background:transparent}
 
-  /* ENTRADA DE DADES */
+  /* CONTROLS */
   .controls-grid{display:grid;grid-template-columns:1fr 1px 1fr;align-items:start}
   .controls-sep{background:var(--border);min-height:80px;margin:0 10px}
   .ctrl-group{display:flex;flex-direction:column;align-items:center;gap:8px}
   .switch-row{display:flex;align-items:center;gap:6px}
   .sw-label{font-size:12px;font-weight:600}
-
-  /* Toggle */
   .toggle{position:relative;width:38px;height:22px;cursor:pointer}
   .toggle input{display:none}
   .toggle-track{position:absolute;inset:0;background:#CBD5E1;border-radius:11px;transition:background .2s}
   .toggle input:checked~.toggle-track{background:var(--primary)}
-  .toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s}
+  .toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;transition:left .2s}
   .toggle input:checked~.toggle-thumb{left:19px}
+  .cycle-btn{border:2px solid #BDBDBD;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:700;cursor:pointer;min-width:88px;text-align:center}
+  .cycle-btn:disabled{opacity:.35;cursor:default;background:#eee!important}
 
-  /* Botó cíclic */
-  .cycle-btn{border:2px solid #BDBDBD;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;min-width:88px;text-align:center;transition:transform .1s,filter .1s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .cycle-btn:active{transform:scale(0.94);filter:brightness(0.9)}
-  .cycle-btn:disabled{opacity:.35;cursor:default}
-
-  /* Valor del dia */
+  /* VALOR */
   .valor-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-  .valor-title{font-size:14px;font-weight:700}
   .valor-controls{display:flex;align-items:center;justify-content:center;gap:20px}
   .valor-num{font-size:26px;font-weight:700;font-family:'DM Mono',monospace;min-width:56px;text-align:center;color:var(--primary)}
-  .valor-btn{width:46px;height:46px;border-radius:50%;border:2px solid var(--primary);background:#fff;color:var(--primary);font-size:26px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s;line-height:1}
-  .valor-btn:active{background:var(--primary-light)}
-  .valor-btn:disabled{opacity:.3;cursor:default;border-color:#CBD5E1;color:#CBD5E1}
+  .valor-btn{width:46px;height:46px;border-radius:50%;border:2px solid var(--primary);background:#fff;color:var(--primary);font-size:26px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  .valor-btn:disabled{opacity:.3;border-color:#CBD5E1;color:#CBD5E1}
 
   #missatge{font-size:12px;color:#4CAF50;font-style:italic;text-align:center;min-height:18px;margin-top:8px}
   hr.dv{border:none;border-top:1px solid var(--border);margin:12px 0}
 
-  /* Registre */
+  /* REGISTRE I COMPTADORS */
   .reg-item{border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:6px;border:1px solid #BDBDBD;font-size:13px;font-weight:700;font-family:'DM Mono',monospace}
-  .no-dades{font-size:13px;color:var(--text-muted);font-style:italic;text-align:center;padding:8px}
-
-  /* Comptadors */
   .comp-item{background:#F8FAFC;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:8px}
-  .comp-f1{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-  .comp-color{width:14px;height:14px;border-radius:4px;border:1px solid #BDBDBD;flex-shrink:0}
+  .comp-f1{display:flex;align-items:center;gap:8px}
+  .comp-color{width:14px;height:14px;border-radius:4px;border:1px solid #BDBDBD}
   .comp-nom{font-size:12px;font-weight:700;min-width:58px}
   .comp-total{font-size:14px;font-weight:700;color:var(--primary);min-width:44px;font-family:'DM Mono',monospace}
   .comp-data{font-size:10px;color:var(--text-muted);flex:1}
-  .comp-reset{background:none;border:none;color:var(--primary);font-size:18px;cursor:pointer;padding:0 4px}
-  .comp-f2{display:flex;align-items:center;gap:8px}
-  .comp-f2 label{font-size:11px;color:var(--text-muted);flex-shrink:0}
-  .ini-input{width:60px;height:32px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:13px;font-family:'DM Mono',monospace;color:var(--text);background:#fff;outline:none}
-  .ini-input:focus{border-color:var(--primary)}
-  .ini-save{background:none;border:none;color:#388E3C;font-size:20px;cursor:pointer;padding:0 4px}
+  .comp-reset{background:none;border:none;color:var(--primary);font-size:18px;cursor:pointer}
+  .ini-input{width:60px;height:32px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:13px}
 
-  /* Botons acció */
   .accio-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-  .btn-accio{border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
-  .btn-accio:active{filter:brightness(0.9)}
+  .btn-accio{border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:600;cursor:pointer}
   .btn-esborrar{background:#EF9A9A;color:#B71C1C}
   .btn-reset{background:#FFCDD2;color:#B71C1C}
+  .btn-backup{background:#C8E6C9;color:#2E7D32}
 
-  /* Modal */
+  /* MODAL */
   .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center;padding:20px}
   .modal-overlay.open{display:flex}
-  .modal-box{background:#fff;border-radius:var(--radius);padding:24px;width:100%;max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,.18)}
-  .modal-title{font-size:16px;font-weight:700;margin-bottom:10px}
-  .modal-body{font-size:13px;color:var(--text-muted);margin-bottom:20px;line-height:1.5}
-  .modal-actions{display:flex;gap:10px;justify-content:flex-end}
-  .modal-no{background:none;border:1px solid var(--border);border-radius:8px;padding:8px 18px;font-size:14px;font-weight:600;color:var(--text-muted);cursor:pointer;font-family:'DM Sans',sans-serif}
-  .modal-si{background:var(--primary);border:none;border-radius:8px;padding:8px 18px;font-size:14px;font-weight:600;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif}
-  .modal-si.perill{background:#E53935}
+  .modal-box{background:#fff;border-radius:var(--radius);padding:24px;width:100%;max-width:320px}
 </style>
 </head>
 <body>
 
-<h1>📅 Calendari Laboral</h1>
+<h1 id="txt-titol">Calendari Laboral</h1>
 
-<div class="card">
+<div class="card" id="card-calendari">
   <div class="nav-mes">
     <button class="nav-btn" onclick="canviarMes(-1)">‹</button>
     <div style="display:flex;align-items:center;gap:10px">
-      <button class="btn-avui" onclick="anarAvui()">Avui</button>
+      <button class="btn-avui" id="txt-avui" onclick="anarAvui()">Avui</button>
       <h2 id="titol-mes"></h2>
     </div>
     <button class="nav-btn" onclick="canviarMes(1)">›</button>
@@ -127,7 +101,7 @@
 </div>
 
 <div class="card">
-  <div class="card-title">Entrada de dades</div>
+  <div class="card-title" id="txt-entrada">Entrada de dades</div>
   <div class="controls-grid">
     <div class="ctrl-group">
       <div class="switch-row">
@@ -135,7 +109,7 @@
           <input type="checkbox" id="chk-fons" onchange="actualitzarControls()">
           <div class="toggle-track"></div><div class="toggle-thumb"></div>
         </label>
-        <span class="sw-label">Modificar</span>
+        <span class="sw-label" id="txt-modificar">Modificar</span>
       </div>
       <button class="cycle-btn" id="btn-fons" onclick="ciclarColor('fons')"></button>
     </div>
@@ -146,20 +120,20 @@
           <input type="checkbox" id="chk-text" onchange="actualitzarControls()">
           <div class="toggle-track"></div><div class="toggle-thumb"></div>
         </label>
-        <span class="sw-label">C. laboral</span>
+        <span class="sw-label" id="txt-claboral">C. laboral</span>
       </div>
       <button class="cycle-btn" id="btn-text" onclick="ciclarColor('text')"></button>
     </div>
   </div>
   <hr class="dv">
   <div class="valor-header">
-    <span class="valor-title">VARIAR HORES</span>
+    <span class="valor-title" id="txt-variar">VARIAR HORES</span>
     <div class="switch-row">
       <label class="toggle">
         <input type="checkbox" id="chk-valor" onchange="actualitzarControls()">
         <div class="toggle-track"></div><div class="toggle-thumb"></div>
       </label>
-      <span class="sw-label" style="font-size:11px;color:var(--text-muted)">Habilitar</span>
+      <span class="sw-label" id="txt-habilitar" style="font-size:11px;color:var(--text-muted)">Habilitar</span>
     </div>
   </div>
   <div class="valor-controls">
@@ -171,438 +145,231 @@
 </div>
 
 <div class="card">
-  <div class="card-title">Registre del mes</div>
+  <div class="card-title" id="txt-registre">Registre del mes</div>
   <div id="registre-llista"></div>
   <hr class="dv">
-  <div class="card-title" style="margin-top:4px">Comptadors per color</div>
+  <div class="card-title" id="txt-comptadors" style="margin-top:4px">Comptadors per color</div>
   <div id="comptadors-llista"></div>
   <hr class="dv">
-  <div class="accio-row" style="margin-bottom:10px">
-    <button class="btn-accio" style="background:#C8E6C9;color:#1B5E20" onclick="exportarBackup()">💾 Exportar còpia</button>
-    <button class="btn-accio" style="background:#BBDEFB;color:#0D47A1" onclick="document.getElementById('inp-backup').click()">📂 Importar còpia</button>
-    <input type="file" id="inp-backup" accept=".json" style="display:none" onchange="importarBackup(event)">
+  <div class="card-title" id="txt-copia">Còpia de seguretat</div>
+  <div class="accio-row" style="margin-bottom:15px">
+    <button class="btn-accio btn-backup" id="txt-exportar" onclick="exportarDades()">📤 Exportar JSON</button>
+    <button class="btn-accio btn-backup" id="txt-importar" onclick="document.getElementById('input-import').click()">📥 Importar JSON</button>
+    <input type="file" id="input-import" style="display:none" accept=".json" onchange="importarDades(event)">
   </div>
   <div class="accio-row">
-    <button class="btn-accio btn-esborrar" onclick="confirmarEsborrarMes()">🗑 Esborra el mes</button>
-    <button class="btn-accio btn-reset"    onclick="confirmarReset()">💥 Reset total</button>
+    <button class="btn-accio btn-esborrar" id="txt-esborrarMes" onclick="confirmarEsborrarMes()">🗑 Esborra el mes</button>
+    <button class="btn-accio btn-reset" id="txt-reset" onclick="confirmarReset()">💥 Reset total</button>
   </div>
 </div>
 
 <div class="modal-overlay" id="modal">
   <div class="modal-box">
-    <div class="modal-title" id="modal-title"></div>
-    <div class="modal-body"  id="modal-body"></div>
-    <div class="modal-actions">
-      <button class="modal-no" id="modal-no">No</button>
-      <button class="modal-si" id="modal-si">Sí</button>
+    <div class="modal-title" id="modal-title" style="font-weight:700;margin-bottom:10px"></div>
+    <div class="modal-body" id="modal-body" style="font-size:13px;color:var(--text-muted);margin-bottom:20px"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button id="modal-no" style="padding:8px 18px;border:1px solid var(--border);background:none;border-radius:8px;cursor:pointer">No</button>
+      <button id="modal-si" style="padding:8px 18px;background:var(--primary);color:#fff;border:none;border-radius:8px;cursor:pointer">Sí</button>
     </div>
   </div>
 </div>
 
 <script>
-const DIES_SETMANA = ['Dl','Dt','Dc','Dj','Dv','Ds','Dg'];
-const MESOS_CA = ['','Gener','Febrer','Març','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'];
-
-// Laborable → color gris per defecte. Vacances → text groc.
-const COLORS_FONS = [
-  { nom:'C.C.',      hex:'#90CAF9', tc:'#212121' },
-  { nom:'Laborable', hex:'#F5F5F5', tc:'#212121' },
-  { nom:'Ll. Disp.', hex:'#35A54D', tc:'#FFFFFF' },
-  { nom:' Fer Flexi',    hex:'#FFF59D', tc:'#212121' },
-  { nom:'Tornar Flexi',    hex:'#FFF59D', tc:'#212121' },
-  { nom:'Vacances',  hex:'#781862', tc:'#FFF59D' },
-];
-const COLORS_TEXT = [
-  { nom:'Laborable', hex:'#000000' },
-  { nom:'Festiu',    hex:'#E53935' },
-];
-
-const HEX_CC      = '#90CAF9';
-const HEX_FESTIU  = '#E53935';
-const COLOR_DEF   = '#F5F5F5';
-const COLOR_DS    = '#F9A825';
-const COLOR_DG    = '#E53935';
-const COLOR_T_DEF = '#212121';
-
-let memoria    = JSON.parse(localStorage.getItem('calendari_personal') || '{}');
-let comptadors = JSON.parse(localStorage.getItem('comptadors_colors')  || '{}');
-
-const _avui = new Date();
-let navMes = _avui.getMonth() + 1;
-let navAny = _avui.getFullYear();
-let idxFons = 0, idxText = 0, valorDia = 8;
-
-// Inicialitza comptadors (sense Laborable)
-COLORS_FONS.forEach(c => {
-  if (c.nom === 'Laborable') return;
-  const k = (c.nom==='+Flexi'||c.nom==='-Flexi') ? '+Flexi' : c.nom;
-  if (!comptadors[k]) {
-    comptadors[k] = { any:_avui.getFullYear(), mes:_avui.getMonth()+1, dia:_avui.getDate(), valor_inicial:0 };
+// --- TRADUCCIONS ---
+const I18N = {
+  ca: {
+    titol: "📅 Calendari Laboral", entrada: "Entrada de dades", modificar: "Modificar", claboral: "C. laboral", variar: "VARIAR HORES", habilitar: "Habilitar", registre: "Registre del mes", comptadors: "Comptadors per color", copia: "Còpia de seguretat", exportar: "📤 Exportar JSON", importar: "📥 Importar JSON", esborrarMes: "🗑 Esborra el mes", reset: "💥 Reset total", avui: "Avui",
+    mesos: ['', 'Gener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny', 'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Desembre'],
+    dies: ['Dl', 'Dt', 'Dc', 'Dj', 'Dv', 'Ds', 'Dg'],
+    msgDesat: "✓ Desat", msgExport: "✓ Còpia exportada", msgImport: "✓ Dades importades", msgEsborrat: "✓ Mes esborrat", confirmImport: "Això sobreescriurà tot el calendari. Continuar?", confirmReset: "Vols esborrar tota la memòria?", horesIni: "Hores inicials:"
+  },
+  es: {
+    titol: "📅 Calendario Laboral", entrada: "Entrada de datos", modificar: "Modificar", claboral: "C. laboral", variar: "VARIAR HORAS", habilitar: "Habilitar", registre: "Registro del mes", comptadors: "Contadores por color", copia: "Copia de seguridad", exportar: "📤 Exportar JSON", importar: "📥 Importar JSON", esborrarMes: "🗑 Borrar mes", reset: "💥 Reset total", avui: "Hoy",
+    mesos: ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    dies: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'],
+    msgDesat: "✓ Guardado", msgExport: "✓ Copia exportada", msgImport: "✓ Datos importados", msgEsborrat: "✓ Mes borrado", confirmImport: "¿Esto sobrescribirá todo el calendario. Continuar?", confirmReset: "¿Quieres borrar toda la memoria?", horesIni: "Horas iniciales:"
+  },
+  en: {
+    titol: "📅 Work Calendar", entrada: "Data Input", modificar: "Modify", claboral: "Work Day", variar: "VARY HOURS", habilitar: "Enable", registre: "Month Records", comptadors: "Color Counters", copia: "Backup", exportar: "📤 Exportar JSON", importar: "📥 Importar JSON", esborrarMes: "🗑 Clear Month", reset: "💥 Hard Reset", avui: "Today",
+    mesos: ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    dies: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+    msgDesat: "✓ Saved", msgExport: "✓ Backup exported", msgImport: "✓ Data imported", msgEsborrat: "✓ Month cleared", confirmImport: "This will overwrite all data. Continue?", confirmReset: "Delete all memory?", horesIni: "Initial hours:"
   }
-});
-desarTot();
+};
+
+let lang = navigator.language.split('-')[0];
+if (!I18N[lang]) lang = 'en';
+const T = I18N[lang];
+
+function aplicarTraduccions() {
+  document.getElementById('txt-titol').textContent = T.titol;
+  document.getElementById('txt-entrada').textContent = T.entrada;
+  document.getElementById('txt-modificar').textContent = T.modificar;
+  document.getElementById('txt-claboral').textContent = T.claboral;
+  document.getElementById('txt-variar').textContent = T.variar;
+  document.getElementById('txt-habilitar').textContent = T.habilitar;
+  document.getElementById('txt-registre').textContent = T.registre;
+  document.getElementById('txt-comptadors').textContent = T.comptadors;
+  document.getElementById('txt-copia').textContent = T.copia;
+  document.getElementById('txt-exportar').textContent = T.exportar;
+  document.getElementById('txt-importar').textContent = T.importar;
+  document.getElementById('txt-esborrarMes').textContent = T.esborrarMes;
+  document.getElementById('txt-reset').textContent = T.reset;
+  document.getElementById('txt-avui').textContent = T.avui;
+}
+
+// --- LÒGICA CALENDARI ---
+const COLORS_FONS = [
+  { nom:'C.C.', hex:'#90CAF9', tc:'#212121' },
+  { nom: lang==='ca'?'Laborable':(lang==='es'?'Laborable':'Workday'), hex:'#F5F5F5', tc:'#212121' },
+  { nom:'Ll. Disp.', hex:'#35A54D', tc:'#FFFFFF' },
+  { nom:'Flexi', hex:'#FFF59D', tc:'#212121' },
+  { nom:'Vacances', hex:'#781862', tc:'#FFF59D' },
+];
+const COLORS_TEXT = [{ nom:'Laborable', hex:'#000000' }, { nom:'Festiu', hex:'#1A56AF' }];
+
+const HEX_CC = '#90CAF9', HEX_FESTIU = '#1A56AF', COLOR_DEF = '#F5F5F5', COLOR_DS = '#F9A825', COLOR_DG = '#E53935', COLOR_T_DEF = '#212121';
+
+let memoria = JSON.parse(localStorage.getItem('calendari_personal') || '{}');
+let comptadors = JSON.parse(localStorage.getItem('comptadors_colors') || '{}');
+const _avui = new Date();
+let navMes = _avui.getMonth() + 1, navAny = _avui.getFullYear();
+let idxFons = 0, idxText = 0, valorDia = 8;
 
 function desarTot() {
   localStorage.setItem('calendari_personal', JSON.stringify(memoria));
-  localStorage.setItem('comptadors_colors',  JSON.stringify(comptadors));
-}
-
-// ── Helpers data ──
-function diesDelMes(a,m){ return new Date(a,m,0).getDate(); }
-function primerDia(a,m){ const d=new Date(a,m-1,1).getDay(); return d===0?6:d-1; }
-function diaSetmana(a,m,d){ const x=new Date(a,m-1,d).getDay(); return x===0?6:x-1; }
-function esNoLab(clau, info) {
-  const [a,m,d] = clau.split('-').map(Number);
-  const dw = (()=>{ const x=new Date(a,m-1,d).getDay(); return x===0?6:x-1; })();
-  if (dw===5||dw===6) return true;
-  if (info && info.text===HEX_FESTIU) return true;
-  return false;
-}
-
-// ── Càlcul comptadors ──
-function calcularCC() {
-  const c = comptadors['C.C.']||{};
-  let total = c.valor_inicial||0;
-  const avui = new Date(); avui.setHours(0,0,0,0);
-  const inici = new Date(avui.getFullYear(),0,1);
-  let cur = new Date(inici);
-  while (cur<=avui) {
-    const clau = `${cur.getFullYear()}-${cur.getMonth()+1}-${cur.getDate()}`;
-    const info = memoria[clau]||{};
-    const noLab = esNoLab(clau,info);
-    if (info.fons===HEX_CC) { if (!noLab) total+=(info.valor||0); }
-    else if (noLab) total+=8;
-    cur.setDate(cur.getDate()+1);
-  }
-  return total;
-}
-
-function calcularHores(nom) {
-  if (nom==='C.C.') return calcularCC();
-  const k = (nom==='+Flexi'||nom==='-Flexi') ? '+Flexi' : nom;
-  const c = comptadors[k]||{};
-  let total = c.valor_inicial||0;
-  const avui = new Date(); avui.setHours(0,0,0,0);
-  const inici = new Date(avui.getFullYear(),0,1);
-  const hex = COLORS_FONS.find(x=>x.nom===nom)?.hex;
-  if (!hex) return total;
-  Object.entries(memoria).forEach(([clau,info])=>{
-    const [a,m,d] = clau.split('-').map(Number);
-    const dt = new Date(a,m-1,d);
-    if (dt>=inici && dt<=avui && info.fons===hex) total+=(info.valor||0);
-  });
-  return total;
-}
-
-// ── Controls ──
-function ciclarColor(t) {
-  if (t==='fons') { idxFons=(idxFons+1)%COLORS_FONS.length; pintarBadgeFons(); }
-  else            { idxText=(idxText+1)%COLORS_TEXT.length;  pintarBadgeText(); }
-}
-
-function pintarBadgeFons() {
-  const c = COLORS_FONS[idxFons];
-  const b = document.getElementById('btn-fons');
-  b.textContent = c.nom; b.style.background = c.hex; b.style.color = c.tc;
-}
-function pintarBadgeText() {
-  const c = COLORS_TEXT[idxText];
-  const b = document.getElementById('btn-text');
-  b.textContent = c.nom; b.style.background = '#EEEEEE'; b.style.color = c.hex;
+  localStorage.setItem('comptadors_colors', JSON.stringify(comptadors));
 }
 
 function actualitzarControls() {
-  const fons  = document.getElementById('chk-fons').checked;
-  const text  = document.getElementById('chk-text').checked;
-  const valor = document.getElementById('chk-valor').checked;
-  document.getElementById('btn-fons').disabled  = !fons;
-  document.getElementById('btn-text').disabled  = !text;
-  document.getElementById('btn-menys').disabled = !valor;
-  document.getElementById('btn-mes').disabled   = !valor;
+  const f = document.getElementById('chk-fons').checked;
+  const t = document.getElementById('chk-text').checked;
+  const v = document.getElementById('chk-valor').checked;
+  document.getElementById('btn-fons').disabled = !f;
+  document.getElementById('btn-text').disabled = !t;
+  document.getElementById('btn-menys').disabled = !v;
+  document.getElementById('btn-mes').disabled = !v;
 }
 
-function canviarValor(delta) {
-  let v = valorDia + delta;
-  if (v===0) v = delta>0 ? 1 : -1;
-  v = Math.max(-8, Math.min(8, v));
-  valorDia = v;
-  pintarDisplayValor();
+function ciclarColor(t) {
+  if(t==='fons'){ idxFons=(idxFons+1)%COLORS_FONS.length; pintarBadgeFons(); }
+  else { idxText=(idxText+1)%COLORS_TEXT.length; pintarBadgeText(); }
 }
-function pintarDisplayValor() {
-  const el = document.getElementById('valor-display');
-  el.textContent = (valorDia>=0?'+':'')+valorDia;
-  el.style.color = valorDia>=0 ? '#1976D2' : '#E53935';
-}
+function pintarBadgeFons(){ const c=COLORS_FONS[idxFons]; const b=document.getElementById('btn-fons'); b.textContent=c.nom; b.style.background=c.hex; b.style.color=c.tc; }
+function pintarBadgeText(){ const c=COLORS_TEXT[idxText]; const b=document.getElementById('btn-text'); b.textContent=c.nom; b.style.color=c.hex; }
 
-// ── Seleccionar dia ──
+function canviarValor(d){ valorDia=Math.max(-8,Math.min(8,valorDia+d)); if(valorDia===0)valorDia=d>0?1:-1; pintarDisplayValor(); }
+function pintarDisplayValor(){ const el=document.getElementById('valor-display'); el.textContent=(valorDia>=0?'+':'')+valorDia; el.style.color=valorDia>=0?'#1976D2':'#E53935'; }
+
 function seleccionarDia(clau) {
   const [a,m,d] = clau.split('-').map(Number);
-  const dw = diaSetmana(a,m,d);
-  const esDs=(dw===5), esDg=(dw===6);
   const infoEx = memoria[clau]||{};
   const chkF = document.getElementById('chk-fons').checked;
   const chkT = document.getElementById('chk-text').checked;
   const chkV = document.getElementById('chk-valor').checked;
-  const nomFons = COLORS_FONS[idxFons].nom;
 
-  // Laborable → esborra
-  if (chkF && nomFons==='Laborable') {
-    delete memoria[clau];
-    desarTot(); mostrarMissatge(`✓ Dia ${d} restaurat`); renderTot(); return;
-  }
-
-  const nouFons = chkF ? COLORS_FONS[idxFons].hex : (infoEx.fons||COLOR_DEF);
-  const nomEfectiu = chkF ? nomFons : (COLORS_FONS.find(x=>x.hex===nouFons)?.nom||'');
-
-  let nouText = null;
-  if (chkT) { nouText = COLORS_TEXT[idxText].nom==='Festiu' ? HEX_FESTIU : null; }
-  else      { nouText = infoEx.text||null; }
-
-  let val;
-  if (chkV) { val = valorDia; }
-  else if (nomEfectiu==='+Flexi') { val=8; }
-  else if (nomEfectiu==='-Flexi') { val=-8; }
-  else { val = (esDs||esDg||(nouText===HEX_FESTIU)) ? 8 : -8; }
-
-  if (nouFons===COLOR_DEF && nouText===null) { delete memoria[clau]; }
+  if (chkF && COLORS_FONS[idxFons].hex === COLOR_DEF) { delete memoria[clau]; }
   else {
-    const ni = { fons:nouFons, valor:val, nota:infoEx.nota||'' };
-    if (nouText!==null) ni.text=nouText;
-    memoria[clau]=ni;
+    const nF = chkF ? COLORS_FONS[idxFons].hex : (infoEx.fons||COLOR_DEF);
+    const nT = chkT ? (COLORS_TEXT[idxText].nom==='Festiu'?HEX_FESTIU:null) : (infoEx.text||null);
+    const nV = chkV ? valorDia : (infoEx.valor||8);
+    memoria[clau] = { fons:nF, valor:nV, text:nT };
   }
-  desarTot(); mostrarMissatge(`✓ Dia desat ${val>=0?'+':''}${val}h`); renderTot();
+  desarTot(); mostrarMissatge(T.msgDesat); renderTot();
 }
 
-// ── Navegació ──
-function canviarMes(d) {
-  navMes+=d;
-  if (navMes>12){navMes=1;navAny++;} if (navMes<1){navMes=12;navAny--;}
-  renderTot();
-}
-function anarAvui() { const a=new Date(); navMes=a.getMonth()+1; navAny=a.getFullYear(); renderTot(); }
-
-// ── Render calendari ──
 function renderCalendari() {
-  document.getElementById('titol-mes').textContent = `${MESOS_CA[navMes]} ${navAny}`;
-  const caps = document.getElementById('cal-caps');
-  caps.innerHTML='';
-  DIES_SETMANA.forEach((d,i)=>{
-    const el=document.createElement('div');
-    el.className='cal-cap'+(i===5?' ds':i===6?' dg':'');
-    el.textContent=d; caps.appendChild(el);
-  });
-  const grid=document.getElementById('cal-grid');
-  grid.innerHTML='';
-  const primer=primerDia(navAny,navMes), total=diesDelMes(navAny,navMes);
-  for(let i=0;i<primer;i++){const b=document.createElement('div');b.className='dia-btn buit';grid.appendChild(b);}
-  for(let dia=1;dia<=total;dia++){
-    const clau=`${navAny}-${navMes}-${dia}`;
-    const info=memoria[clau]||null;
-    const dw=diaSetmana(navAny,navMes,dia);
-    const esDs=(dw===5),esDg=(dw===6);
-    let cF,cT;
-    if(info){
-      cF=info.fons||COLOR_DEF;
-      cT=info.text||(cF==='#781862'?'#FFF59D':(esDs?COLOR_DS:(esDg?COLOR_DG:COLOR_T_DEF)));
-    } else { cF=COLOR_DEF; cT=esDs?COLOR_DS:(esDg?COLOR_DG:COLOR_T_DEF); }
-    const val=info?(info.valor||0):0;
-    const punt=(val!==0&&val!==8&&val!==-8);
-    const btn=document.createElement('button');
-    btn.className='dia-btn'; btn.style.background=cF;
-    btn.innerHTML=`<span class="dia-num" style="color:${cT}">${dia}</span><span class="dia-punt ${punt?'':'inv'}"></span>`;
-    btn.onclick=()=>seleccionarDia(clau);
-    grid.appendChild(btn);
+  document.getElementById('titol-mes').textContent = `${T.mesos[navMes]} ${navAny}`;
+  const caps = document.getElementById('cal-caps'); caps.innerHTML='';
+  T.dies.forEach((d,i)=>{ caps.innerHTML+=`<div class="cal-cap ${i===5?'ds':i===6?'dg':''}">${d}</div>`; });
+  
+  const grid = document.getElementById('cal-grid'); grid.innerHTML='';
+  const primer = new Date(navAny, navMes-1, 1).getDay();
+  const buits = primer === 0 ? 6 : primer - 1;
+  for(let i=0;i<buits;i++) grid.innerHTML+='<div class="dia-btn buit"></div>';
+  
+  const total = new Date(navAny, navMes, 0).getDate();
+  for(let d=1; d<=total; d++) {
+    const clau = `${navAny}-${navMes}-${d}`;
+    const info = memoria[clau]||{};
+    const dw = (new Date(navAny, navMes-1, d).getDay()+6)%7;
+    const cF = info.fons || COLOR_DEF;
+    const cT = info.text || (dw===5?COLOR_DS:dw===6?COLOR_DG:COLOR_T_DEF);
+    const punt = info.valor && info.valor!==8 && info.valor!==-8;
+    grid.innerHTML += `<button class="dia-btn" style="background:${cF}" onclick="seleccionarDia('${clau}')">
+      <span class="dia-num" style="color:${cT}">${d}</span>
+      <span class="dia-punt ${punt?'':'inv'}"></span>
+    </button>`;
   }
 }
 
-// ── Render registre ──
 function renderRegistre() {
-  const el=document.getElementById('registre-llista');
-  el.innerHTML='';
-  const h2n={};
-  COLORS_FONS.forEach(c=>{ if(!h2n[c.hex]) h2n[c.hex]=c.nom; });
-  const ents=[];
-  for(let d=1;d<=31;d++){
-    const clau=`${navAny}-${navMes}-${d}`;
-    if(memoria[clau]){
-      const v=memoria[clau].valor||0;
-      if(v!==-8&&v!==8&&v!==0) ents.push({dia:d,val:v,fons:memoria[clau].fons||COLOR_DEF});
+  const el = document.getElementById('registre-llista'); el.innerHTML='';
+  let trobat = false;
+  for(let d=1; d<=31; d++){
+    const clau = `${navAny}-${navMes}-${d}`;
+    if(memoria[clau] && (memoria[clau].valor!==8 && memoria[clau].valor!==-8)){
+      el.innerHTML += `<div class="reg-item" style="background:${memoria[clau].fons}">Dia ${d}: ${memoria[clau].valor}h</div>`;
+      trobat = true;
     }
   }
-  if(!ents.length){el.innerHTML='<div class="no-dades">Sense dades aquest mes.</div>';return;}
-  ents.forEach(({dia,val,fons})=>{
-    const nom=h2n[fons]||'';
-    const div=document.createElement('div');
-    div.className='reg-item'; div.style.background=fons;
-    div.style.color=(fons==='#781862')?'#FFF59D':'#212121';
-    div.textContent=`Dia ${String(dia).padStart(2,'0')}   ${val}h hores${nom?`   [${nom}]`:''}`;
-    el.appendChild(div);
-  });
+  if(!trobat) el.innerHTML = `<div style="text-align:center;font-size:12px;color:var(--text-muted)">-</div>`;
 }
 
-// ── Render comptadors (sense Laborable) ──
-function renderComptadors() {
-  const el=document.getElementById('comptadors-llista');
-  el.innerHTML='';
-  const any=new Date().getFullYear();
-  const vists=new Set();
-  COLORS_FONS.forEach(c=>{
-    if(c.nom==='Laborable') return;
-    if(vists.has(c.hex)) return;
-    vists.add(c.hex);
-    const nv=(c.nom==='+Flexi'||c.nom==='-Flexi')?'Flexi':c.nom;
-    const k=(c.nom==='+Flexi'||c.nom==='-Flexi')?'+Flexi':c.nom;
-    const h=calcularHores(c.nom);
-    const comp=comptadors[k]||{};
-    const vi=comp.valor_inicial||0;
-    const sg=h>=0?'+':'';
-    const div=document.createElement('div');
-    div.className='comp-item';
-    div.innerHTML=`
-      <div class="comp-f1">
-        <div class="comp-color" style="background:${c.hex}"></div>
-        <span class="comp-nom">${nv}</span>
-        <span class="comp-total">${sg}${h}h</span>
-        <span class="comp-data">Des de 01/01/${any}</span>
-        <button class="comp-reset" onclick="confirmarReinit('${k}','${nv}')">↺</button>
-      </div>
-      <div class="comp-f2">
-        <label>Hores inicials:</label>
-        <input class="ini-input" id="ini-${k}" type="number" value="${vi}">
-        <button class="ini-save" onclick="confirmarDesarIni('${k}','${nv}')">✓</button>
-      </div>`;
-    el.appendChild(div);
-  });
-}
+function canviarMes(d){ navMes+=d; if(navMes>12){navMes=1;navAny++;} if(navMes<1){navMes=12;navAny--;} renderTot(); }
+function anarAvui(){ navMes=_avui.getMonth()+1; navAny=_avui.getFullYear(); renderTot(); }
 
-// ── Modal ──
-let _cb=null;
-function obrirModal(tit,cos,cb,perill=false){
-  document.getElementById('modal-title').textContent=tit;
-  document.getElementById('modal-body').textContent=cos;
-  document.getElementById('modal-si').className='modal-si'+(perill?' perill':'');
-  _cb=cb; document.getElementById('modal').classList.add('open');
-}
-document.getElementById('modal-no').onclick=()=>{ document.getElementById('modal').classList.remove('open'); _cb=null; };
-document.getElementById('modal-si').onclick=()=>{ document.getElementById('modal').classList.remove('open'); if(_cb){_cb();_cb=null;} };
-
-function confirmarDesarIni(k,nv){
-  const inp=document.getElementById(`ini-${k}`);
-  const vn=parseInt(inp.value||'0')||0;
-  const va=comptadors[k]?.valor_inicial||0;
-  const noOrig=document.getElementById('modal-no').onclick;
-  obrirModal(`Modificar hores inicials de ${nv}`,`Vols canviar de ${va>=0?'+':''}${va}h a ${vn>=0?'+':''}${vn}h?`,()=>{
-    if(!comptadors[k]){const a=new Date();comptadors[k]={any:a.getFullYear(),mes:a.getMonth()+1,dia:a.getDate(),valor_inicial:0};}
-    comptadors[k].valor_inicial=vn; desarTot(); renderComptadors();
-  });
-  document.getElementById('modal-no').onclick=()=>{
-    document.getElementById('modal').classList.remove('open');
-    inp.value=va; _cb=null; document.getElementById('modal-no').onclick=noOrig;
-  };
-}
-
-function confirmarReinit(k,nv){
-  obrirModal(`Reinicialitzar comptador ${nv}`,'Segur? Les hores inicials es mantindran.',()=>{
-    const a=new Date();const ve=comptadors[k]?.valor_inicial||0;
-    comptadors[k]={any:a.getFullYear(),mes:a.getMonth()+1,dia:a.getDate(),valor_inicial:ve};
-    desarTot(); renderComptadors();
-  });
-}
-
-function confirmarEsborrarMes(){
-  obrirModal('Esborrar el mes',`Segur que vols esborrar ${MESOS_CA[navMes]} ${navAny}?`,()=>{
-    Object.keys(memoria).forEach(k=>{if(k.startsWith(`${navAny}-${navMes}-`))delete memoria[k];});
-    desarTot(); mostrarMissatge('✓ Mes esborrat'); renderTot();
-  },true);
-}
-
-function confirmarReset(){
-  obrirModal('Reset total','Segur que vols esborrar tota la memòria?',()=>{
-    memoria={}; comptadors={};
-    const a=new Date();
-    COLORS_FONS.forEach(c=>{
-      if(c.nom==='Laborable')return;
-      const k=(c.nom==='+Flexi'||c.nom==='-Flexi')?'+Flexi':c.nom;
-      if(!comptadors[k]) comptadors[k]={any:a.getFullYear(),mes:a.getMonth()+1,dia:a.getDate(),valor_inicial:0};
-    });
-    desarTot(); mostrarMissatge('✓ Memòria esborrada'); renderTot();
-  },true);
-}
-
-// ── Còpia de seguretat ──
-function exportarBackup() {
-  const dades = {
-    versio: 1,
-    data_exportacio: new Date().toISOString(),
-    calendari_personal: memoria,
-    comptadors_colors: comptadors
-  };
-  const blob = new Blob([JSON.stringify(dades, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  const ara = new Date();
-  const nom = `backup_calendari_${ara.getFullYear()}${String(ara.getMonth()+1).padStart(2,'0')}${String(ara.getDate()).padStart(2,'0')}.json`;
-  a.href = url; a.download = nom; a.click();
-  URL.revokeObjectURL(url);
-  mostrarMissatge('✓ Còpia exportada');
-}
-
-function importarBackup(event) {
-  const fitxer = event.target.files[0];
-  if (!fitxer) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const dades = JSON.parse(e.target.result);
-      if (!dades.calendari_personal || !dades.comptadors_colors) throw new Error('Format invàlid');
-      obrirModal(
-        'Importar còpia de seguretat',
-        `Vols restaurar la còpia del ${dades.data_exportacio ? new Date(dades.data_exportacio).toLocaleDateString('ca-ES') : 'fitxer seleccionat'}? Les dades actuals es sobreescriuran.`,
-        () => {
-          memoria = dades.calendari_personal;
-          comptadors = dades.comptadors_colors;
-          desarTot(); mostrarMissatge('✓ Còpia restaurada'); renderTot();
-        }, false
-      );
-    } catch(err) {
-      mostrarMissatge('✗ Fitxer no vàlid');
-    }
-    event.target.value = '';
-  };
-  reader.readAsText(fitxer);
-}
-
-
-let _mt=null;
 function mostrarMissatge(txt){
   const el=document.getElementById('missatge'); el.textContent=txt;
-  if(_mt)clearTimeout(_mt); _mt=setTimeout(()=>{el.textContent='';},3000);
+  setTimeout(()=>el.textContent='', 2000);
 }
 
-function renderTot(){ renderCalendari(); renderRegistre(); renderComptadors(); }
+// --- SWIPE GESTURES ---
+window.addEventListener('load', () => {
+  let touchstartX = 0, touchendX = 0;
+  const area = document.getElementById('card-calendari');
+  area.addEventListener('touchstart', e => touchstartX = e.changedTouches[0].screenX, {passive:true});
+  area.addEventListener('touchend', e => {
+    touchendX = e.changedTouches[0].screenX;
+    if (touchendX < touchstartX - 60) canviarMes(1);
+    if (touchendX > touchstartX + 60) canviarMes(-1);
+  }, {passive:true});
+});
 
-pintarBadgeFons(); pintarBadgeText(); pintarDisplayValor(); actualitzarControls(); renderTot();
+// --- BACKUP ---
+function exportarDades(){
+  const blob = new Blob([JSON.stringify({memoria,comptadors})], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download=`backup_${navAny}.json`; a.click();
+  mostrarMissatge(T.msgExport);
+}
+function importarDades(e){
+  const file = e.target.files[0]; if(!file)return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const data = JSON.parse(ev.target.result);
+    memoria=data.memoria; comptadors=data.comptadors; desarTot(); renderTot(); mostrarMissatge(T.msgImport);
+  };
+  reader.readAsText(file);
+}
 
-// ── Swipe per canviar de mes ──
-let touchStartX = 0;
-let touchStartY = 0;
+function renderTot(){ renderCalendari(); renderRegistre(); }
 
-document.addEventListener('touchstart', e => {
-  touchStartX = e.touches[0].clientX;
-  touchStartY = e.touches[0].clientY;
-}, { passive: true });
+// Init
+aplicarTraduccions();
+pintarBadgeFons();
+pintarBadgeText();
+pintarDisplayValor();
+actualitzarControls();
+renderTot();
 
+// Bloqueig Zoom Doble Tap
+let lastTouch = 0;
 document.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - touchStartX;
-  const dy = e.changedTouches[0].clientY - touchStartY;
-
-  // Només actua si el moviment horitzontal és dominant i prou gran
-  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-    if (dx < 0) canviarMes(1);   // llisca esquerra → mes següent
-    else        canviarMes(-1);  // llisca dreta → mes anterior
-  }
-}, { passive: true });
-
+  const now = Date.now();
+  if(now - lastTouch <= 300) e.preventDefault();
+  lastTouch = now;
+}, false);
 </script>
 </body>
 </html>
