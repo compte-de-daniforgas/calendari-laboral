@@ -262,7 +262,6 @@ function canviarValor(d){ valorDia=Math.max(-8,Math.min(8,valorDia+d)); if(valor
 function pintarDisplayValor(){ const el=document.getElementById('valor-display'); el.textContent=(valorDia>=0?'+':'')+valorDia; el.style.color=valorDia>=0?'#1976D2':'#E53935'; }
 
 function seleccionarDia(clau) {
-  const [a,m,d] = clau.split('-').map(Number);
   const infoEx = memoria[clau]||{};
   const chkF = document.getElementById('chk-fons').checked;
   const chkT = document.getElementById('chk-text').checked;
@@ -316,12 +315,85 @@ function renderRegistre() {
   if(!trobat) el.innerHTML = `<div style="text-align:center;font-size:12px;color:var(--text-muted)">-</div>`;
 }
 
+function renderComptadors() {
+  const llista = document.getElementById('comptadors-llista');
+  llista.innerHTML = '';
+  
+  const totals = {};
+  COLORS_FONS.forEach(c => totals[c.hex] = 0);
+
+  Object.values(memoria).forEach(item => {
+    if (totals[item.fons] !== undefined) {
+      totals[item.fons] += (item.valor || 8);
+    }
+  });
+
+  COLORS_FONS.forEach(c => {
+    const inicial = comptadors[c.hex] || 0;
+    const suma = totals[c.hex] || 0;
+    const totalReal = inicial + suma;
+    
+    if (totalReal !== 0 || c.hex !== COLOR_DEF) {
+      llista.innerHTML += `
+        <div class="comp-item">
+          <div class="comp-f1">
+            <div class="comp-color" style="background:${c.hex}"></div>
+            <div class="comp-nom">${c.nom}</div>
+            <div class="comp-total">${totalReal}h</div>
+            <div class="comp-data">${T.horesIni}</div>
+            <input type="number" class="ini-input" value="${inicial}" onchange="setInicial('${c.hex}', this.value)">
+            <button class="comp-reset" onclick="resetIndividual('${c.hex}')">↺</button>
+          </div>
+        </div>`;
+    }
+  });
+}
+
+function setInicial(hex, val) {
+  comptadors[hex] = parseFloat(val) || 0;
+  desarTot();
+  renderComptadors();
+}
+
+function resetIndividual(hex) {
+  comptadors[hex] = 0;
+  // Opcional: esborrar també dades del calendari d'aquest color
+  desarTot();
+  renderTot();
+}
+
 function canviarMes(d){ navMes+=d; if(navMes>12){navMes=1;navAny++;} if(navMes<1){navMes=12;navAny--;} renderTot(); }
 function anarAvui(){ navMes=_avui.getMonth()+1; navAny=_avui.getFullYear(); renderTot(); }
 
 function mostrarMissatge(txt){
   const el=document.getElementById('missatge'); el.textContent=txt;
   setTimeout(()=>el.textContent='', 2000);
+}
+
+// --- MODALS DE CONFIRMACIÓ ---
+function obrirModal(titol, cos, onSi) {
+  const m = document.getElementById('modal');
+  document.getElementById('modal-title').textContent = titol;
+  document.getElementById('modal-body').textContent = cos;
+  m.classList.add('open');
+  document.getElementById('modal-si').onclick = () => { onSi(); m.classList.remove('open'); };
+  document.getElementById('modal-no').onclick = () => m.classList.remove('open');
+}
+
+function confirmarEsborrarMes() {
+  obrirModal(T.esborrarMes, "Vols esborrar les dades d'aquest mes?", () => {
+    Object.keys(memoria).forEach(clau => {
+      if(clau.startsWith(`${navAny}-${navMes}-`)) delete memoria[clau];
+    });
+    desarTot(); renderTot(); mostrarMissatge(T.msgEsborrat);
+  });
+}
+
+function confirmarReset() {
+  obrirModal(T.reset, T.confirmReset, () => {
+    memoria = {}; comptadors = {};
+    desarTot(); renderTot();
+  });
 }
 
 // --- SWIPE GESTURES ---
@@ -348,12 +420,14 @@ function importarDades(e){
   const reader = new FileReader();
   reader.onload = (ev) => {
     const data = JSON.parse(ev.target.result);
-    memoria=data.memoria; comptadors=data.comptadors; desarTot(); renderTot(); mostrarMissatge(T.msgImport);
+    memoria=data.memoria || {}; 
+    comptadors=data.comptadors || {}; 
+    desarTot(); renderTot(); mostrarMissatge(T.msgImport);
   };
   reader.readAsText(file);
 }
 
-function renderTot(){ renderCalendari(); renderRegistre(); }
+function renderTot(){ renderCalendari(); renderRegistre(); renderComptadors(); }
 
 // Init
 aplicarTraduccions();
