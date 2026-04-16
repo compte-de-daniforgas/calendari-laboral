@@ -187,7 +187,7 @@ const I18N = {
     titol: "📅 Calendario Laboral", entrada: "Entrada de datos", modificar: "Modificar", claboral: "Festivos locales", variar: "modificar Horas", habilitar: "Habilitar", registre: "Registro del mes", comptadors: "Horas acumuladas", copia: "Copia de seguridad", exportar: "📤 Exportar JSON", importar: "📥 Importar JSON", esborrarMes: "🗑 Borrar mes", reset: "💥 Reset total", avui: "Hoy",
     mesos: ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
     dies: ['Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá', 'Do'],
-    msgDesat: "✓ Guardado", msgExport: "✓ Copia exportada", msgImport: "✓ Datos importados", msgEsborrat: "✓ Mes borrado", confirmImport: "¿Esto sobrescribirá todo el calendario. Continuar?", confirmReset: "¿Quieres borrar toda la memoria?", horesIni: "Horas iniciales:"
+    msgDesat: "✓ Guardado", msgExport: "✓ Copia exportada", msgImport: "✓ Datos importados", msgEsborrat: "✓ Mes borrado", confirmImport: "¿Esto sobrescribirá todo el calendario. Continuar?", confirmReset: "¿Quieres borrar toda la memoria?", horesIni: "Horas inicials:"
   },
   en: {
     titol: "📅 Work Calendar", entrada: "Data Input", modificar: "Modify", claboral: "Local holidays", variar: "Modify Hours", habilitar: "Enable", registre: "Month Records", comptadors: "Accumulated hours", copia: "Backup", exportar: "📤 Export JSON", importar: "📥 Import JSON", esborrarMes: "🗑 Clear Month", reset: "💥 Hard Reset", avui: "Today",
@@ -322,14 +322,24 @@ function renderComptadors() {
   const totals = {};
   COLORS_FONS.forEach(c => totals[c.hex] = 0);
 
-  Object.values(memoria).forEach(item => {
-    if (totals[item.fons] !== undefined) {
-      totals[item.fons] += (item.valor || 8);
+  // Data actual per filtrar
+  const avuiMilis = new Date().setHours(0,0,0,0);
+
+  Object.entries(memoria).forEach(([clau, item]) => {
+    // Convertim la clau "YYYY-MM-DD" a data per comparar
+    const [y, m, d] = clau.split('-').map(Number);
+    const dataClau = new Date(y, m - 1, d).setHours(0,0,0,0);
+
+    // NOMÉS sumem si el dia és avui o anterior
+    if (dataClau <= avuiMilis) {
+        if (totals[item.fons] !== undefined) {
+            totals[item.fons] += (item.valor || 8);
+        }
     }
   });
 
   COLORS_FONS.forEach(c => {
-    // FILTRE ESTRICTE: Si el color és el gris per defecte (#F5F5F5), no el dibuixis
+    // No mostrem Laborable
     if (c.hex.toUpperCase() === '#F5F5F5') return;
 
     const inicial = comptadors[c.hex] || 0;
@@ -358,7 +368,6 @@ function setInicial(hex, val) {
 
 function resetIndividual(hex) {
   comptadors[hex] = 0;
-  // Opcional: esborrar també dades del calendari d'aquest color
   desarTot();
   renderTot();
 }
@@ -411,19 +420,35 @@ window.addEventListener('load', () => {
 
 // --- BACKUP ---
 function exportarDades(){
-  const blob = new Blob([JSON.stringify({memoria,comptadors})], {type:'application/json'});
+  // DESEM AMBDÓS OBJECTES: memòria (dies) i comptadors (hores inicials)
+  const dadesAExportar = {
+    memoria: memoria,
+    comptadors: comptadors
+  };
+  const blob = new Blob([JSON.stringify(dadesAExportar)], {type:'application/json'});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download=`backup_${navAny}.json`; a.click();
+  const a = document.createElement('a'); 
+  a.href=url; 
+  a.download=`backup_calendari_${new Date().toISOString().slice(0,10)}.json`; 
+  a.click();
   mostrarMissatge(T.msgExport);
 }
+
 function importarDades(e){
   const file = e.target.files[0]; if(!file)return;
   const reader = new FileReader();
   reader.onload = (ev) => {
-    const data = JSON.parse(ev.target.result);
-    memoria=data.memoria || {}; 
-    comptadors=data.comptadors || {}; 
-    desarTot(); renderTot(); mostrarMissatge(T.msgImport);
+    try {
+      const data = JSON.parse(ev.target.result);
+      // Validem si existeixen els camps en el JSON importat
+      memoria = data.memoria || {}; 
+      comptadors = data.comptadors || {}; 
+      desarTot(); 
+      renderTot(); 
+      mostrarMissatge(T.msgImport);
+    } catch (err) {
+      alert("Error en el fitxer JSON");
+    }
   };
   reader.readAsText(file);
 }
