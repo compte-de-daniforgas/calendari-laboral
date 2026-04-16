@@ -1,4 +1,4 @@
-<!DOCTYPE html
+<!DOCTYPE html>
 <html lang="ca">
 <head>
 <link rel="manifest" href="manifest.json">
@@ -16,10 +16,84 @@
     --shadow:0 2px 12px rgba(0,0,0,0.08); --radius:16px; --radius-sm:10px;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding:16px;padding-bottom:40px}
-  h1{font-size:22px;font-weight:700;color:var(--primary);text-align:center;margin-bottom:16px}
-  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
-  .card-title{font-size:14px;font-weight:700;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px}
+  
+  body {
+    font-family:'DM Sans',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  
+  /* Títol fix a dalt de tot */
+  .app-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg);
+    padding: 12px 16px 0 16px;
+    z-index: 10;
+  }
+  
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  
+  /* Contenidor principal amb estructura de dos blocs */
+  .app-main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 68px; /* Altura del títol + marge */
+  }
+  
+  /* Calendari FIX (no fa scroll) */
+  .calendar-fixed {
+    flex-shrink: 0;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px;
+    margin: 0 16px 12px 16px;
+    /* Important: evita qualsevol scroll */
+    overflow: visible;
+  }
+  
+  /* Contenidor scrollable per la resta de targetes */
+  .scrollable-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 16px 20px 16px;
+  }
+  
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .card-title {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
 
   /* NAV */
   .nav-mes{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
@@ -111,80 +185,89 @@
 </head>
 <body>
 
-<h1>📅 Calendari Laboral</h1>
-
-<div class="card">
-  <div class="nav-mes">
-    <button class="nav-btn" onclick="canviarMes(-1)">‹</button>
-    <div style="display:flex;align-items:center;gap:10px">
-      <button class="btn-avui" onclick="anarAvui()">Avui</button>
-      <h2 id="titol-mes"></h2>
-    </div>
-    <button class="nav-btn" onclick="canviarMes(1)">›</button>
-  </div>
-  <div class="cal-caps" id="cal-caps"></div>
-  <div class="cal-grid" id="cal-grid"></div>
+<!-- Títol fix -->
+<div class="app-header">
+  <h1>📅 Calendari Laboral</h1>
 </div>
 
-<div class="card">
-  <div class="card-title">Entrada de dades</div>
-  <div class="controls-grid">
-    <div class="ctrl-group">
-      <div class="switch-row">
-        <label class="toggle">
-          <input type="checkbox" id="chk-fons" onchange="actualitzarControls()">
-          <div class="toggle-track"></div><div class="toggle-thumb"></div>
-        </label>
-        <span class="sw-label">Modificar</span>
+<div class="app-main">
+  <!-- Calendari FIX (sempre visible, no scrolla) -->
+  <div class="calendar-fixed" id="calendarCard">
+    <div class="nav-mes">
+      <button class="nav-btn" onclick="canviarMes(-1)">‹</button>
+      <div style="display:flex;align-items:center;gap:10px">
+        <button class="btn-avui" onclick="anarAvui()">Avui</button>
+        <h2 id="titol-mes"></h2>
       </div>
-      <button class="cycle-btn" id="btn-fons" onclick="ciclarColor('fons')"></button>
+      <button class="nav-btn" onclick="canviarMes(1)">›</button>
     </div>
-    <div class="controls-sep"></div>
-    <div class="ctrl-group">
-      <div class="switch-row">
-        <label class="toggle">
-          <input type="checkbox" id="chk-text" onchange="actualitzarControls()">
-          <div class="toggle-track"></div><div class="toggle-thumb"></div>
-        </label>
-        <span class="sw-label">C. laboral</span>
-      </div>
-      <button class="cycle-btn" id="btn-text" onclick="ciclarColor('text')"></button>
-    </div>
+    <div class="cal-caps" id="cal-caps"></div>
+    <div class="cal-grid" id="cal-grid"></div>
   </div>
-  <hr class="dv">
-  <div class="valor-header">
-    <span class="valor-title">MODIFCAR HORES</span>
-    <div class="switch-row">
-      <label class="toggle">
-        <input type="checkbox" id="chk-valor" onchange="actualitzarControls()">
-        <div class="toggle-track"></div><div class="toggle-thumb"></div>
-      </label>
-      <span class="sw-label" style="font-size:11px;color:var(--text-muted)">Habilitar</span>
-    </div>
-  </div>
-  <div class="valor-controls">
-    <button class="valor-btn" id="btn-menys" onclick="canviarValor(-1)" disabled>−</button>
-    <span class="valor-num" id="valor-display">+8</span>
-    <button class="valor-btn" id="btn-mes"   onclick="canviarValor(1)"  disabled>+</button>
-  </div>
-  <div id="missatge"></div>
-</div>
 
-<div class="card">
-  <div class="card-title">Registre del mes</div>
-  <div id="registre-llista"></div>
-  <hr class="dv">
-  <div class="card-title" style="margin-top:4px">Comptadors per color</div>
-  <div id="comptadors-llista"></div>
-  <hr class="dv">
-  <div class="accio-row" style="margin-bottom:10px">
-    <button class="btn-accio" style="background:#C8E6C9;color:#1B5E20" onclick="exportarBackup()">💾 Exportar còpia</button>
-    <button class="btn-accio" style="background:#BBDEFB;color:#0D47A1" onclick="document.getElementById('inp-backup').click()">📂 Importar còpia</button>
-    <input type="file" id="inp-backup" accept=".json" style="display:none" onchange="importarBackup(event)">
-  </div>
-  <div class="accio-row">
-    <button class="btn-accio btn-esborrar" onclick="confirmarEsborrarMes()">🗑 Esborra el mes</button>
-    <button class="btn-accio btn-reset"    onclick="confirmarReset()">💥 Reset total</button>
+  <!-- Contingut scrollable: entrada de dades, registre, comptadors, etc. -->
+  <div class="scrollable-content">
+    <div class="card">
+      <div class="card-title">Entrada de dades</div>
+      <div class="controls-grid">
+        <div class="ctrl-group">
+          <div class="switch-row">
+            <label class="toggle">
+              <input type="checkbox" id="chk-fons" onchange="actualitzarControls()">
+              <div class="toggle-track"></div><div class="toggle-thumb"></div>
+            </label>
+            <span class="sw-label">Modificar</span>
+          </div>
+          <button class="cycle-btn" id="btn-fons" onclick="ciclarColor('fons')"></button>
+        </div>
+        <div class="controls-sep"></div>
+        <div class="ctrl-group">
+          <div class="switch-row">
+            <label class="toggle">
+              <input type="checkbox" id="chk-text" onchange="actualitzarControls()">
+              <div class="toggle-track"></div><div class="toggle-thumb"></div>
+            </label>
+            <span class="sw-label">C. laboral</span>
+          </div>
+          <button class="cycle-btn" id="btn-text" onclick="ciclarColor('text')"></button>
+        </div>
+      </div>
+      <hr class="dv">
+      <div class="valor-header">
+        <span class="valor-title">MODIFCAR HORES</span>
+        <div class="switch-row">
+          <label class="toggle">
+            <input type="checkbox" id="chk-valor" onchange="actualitzarControls()">
+            <div class="toggle-track"></div><div class="toggle-thumb"></div>
+          </label>
+          <span class="sw-label" style="font-size:11px;color:var(--text-muted)">Habilitar</span>
+        </div>
+      </div>
+      <div class="valor-controls">
+        <button class="valor-btn" id="btn-menys" onclick="canviarValor(-1)" disabled>−</button>
+        <span class="valor-num" id="valor-display">+8</span>
+        <button class="valor-btn" id="btn-mes"   onclick="canviarValor(1)"  disabled>+</button>
+      </div>
+      <div id="missatge"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Registre del mes</div>
+      <div id="registre-llista"></div>
+      <hr class="dv">
+      <div class="card-title" style="margin-top:4px">Comptadors per color</div>
+      <div id="comptadors-llista"></div>
+      <hr class="dv">
+      <div class="accio-row" style="margin-bottom:10px">
+        <button class="btn-accio" style="background:#C8E6C9;color:#1B5E20" onclick="exportarBackup()">💾 Exportar còpia</button>
+        <button class="btn-accio" style="background:#BBDEFB;color:#0D47A1" onclick="document.getElementById('inp-backup').click()">📂 Importar còpia</button>
+        <input type="file" id="inp-backup" accept=".json" style="display:none" onchange="importarBackup(event)">
+      </div>
+      <div class="accio-row">
+        <button class="btn-accio btn-esborrar" onclick="confirmarEsborrarMes()">🗑 Esborra el mes</button>
+        <button class="btn-accio btn-reset"    onclick="confirmarReset()">💥 Reset total</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -583,16 +666,27 @@ function renderTot(){ renderCalendari(); renderRegistre(); renderComptadors(); }
 
 pintarBadgeFons(); pintarBadgeText(); pintarDisplayValor(); actualitzarControls(); renderTot();
 
-// ── Swipe per canviar de mes ──
+// ── Swipe per canviar de mes (ara només al calendari fix) ──
 let touchStartX = 0;
 let touchStartY = 0;
+let isSwipingCalendar = false;
 
+// Detectar si el touch comença dins de la targeta del calendari
 document.addEventListener('touchstart', e => {
-  touchStartX = e.touches[0].clientX;
-  touchStartY = e.touches[0].clientY;
+  const calendarCard = document.getElementById('calendarCard');
+  const target = e.target;
+  if (calendarCard && calendarCard.contains(target)) {
+    isSwipingCalendar = true;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  } else {
+    isSwipingCalendar = false;
+  }
 }, { passive: true });
 
 document.addEventListener('touchend', e => {
+  if (!isSwipingCalendar) return;
+  
   const dx = e.changedTouches[0].clientX - touchStartX;
   const dy = e.changedTouches[0].clientY - touchStartY;
 
@@ -601,8 +695,9 @@ document.addEventListener('touchend', e => {
     if (dx < 0) canviarMes(1);   // llisca esquerra → mes següent
     else        canviarMes(-1);  // llisca dreta → mes anterior
   }
+  
+  isSwipingCalendar = false;
 }, { passive: true });
-
 </script>
 </body>
 </html>
