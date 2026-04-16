@@ -329,23 +329,24 @@ function renderComptadors() {
   });
 
   COLORS_FONS.forEach(c => {
+    // FILTRE ESTRICTE: Si el color és el gris per defecte (#F5F5F5), no el dibuixis
+    if (c.hex.toUpperCase() === '#F5F5F5') return;
+
     const inicial = comptadors[c.hex] || 0;
     const suma = totals[c.hex] || 0;
     const totalReal = inicial + suma;
     
-    if (totalReal !== 0 || c.hex !== COLOR_DEF) {
-      llista.innerHTML += `
-        <div class="comp-item">
-          <div class="comp-f1">
-            <div class="comp-color" style="background:${c.hex}"></div>
-            <div class="comp-nom">${c.nom}</div>
-            <div class="comp-total">${totalReal}h</div>
-            <div class="comp-data">${T.horesIni}</div>
-            <input type="number" class="ini-input" value="${inicial}" onchange="setInicial('${c.hex}', this.value)">
-            <button class="comp-reset" onclick="resetIndividual('${c.hex}')">↺</button>
-          </div>
-        </div>`;
-    }
+    llista.innerHTML += `
+      <div class="comp-item">
+        <div class="comp-f1">
+          <div class="comp-color" style="background:${c.hex}"></div>
+          <div class="comp-nom">${c.nom}</div>
+          <div class="comp-total">${totalReal}h</div>
+          <div class="comp-data">${T.horesIni}</div>
+          <input type="number" class="ini-input" value="${inicial}" onchange="setInicial('${c.hex}', this.value)">
+          <button class="comp-reset" onclick="resetIndividual('${c.hex}')">↺</button>
+        </div>
+      </div>`;
   });
 }
 
