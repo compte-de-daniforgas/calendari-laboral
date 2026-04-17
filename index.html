@@ -16,93 +16,19 @@
     --shadow:0 2px 12px rgba(0,0,0,0.08); --radius:16px; --radius-sm:10px;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  
-  body {
-    font-family:'DM Sans',sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    overflow: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-  
-  /* Títol fix a dalt de tot */
-  .app-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: var(--bg);
-    padding: 12px 16px 0 16px;
-    z-index: 10;
-  }
-  
-  h1 {
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--primary);
-    text-align: center;
-    margin-bottom: 12px;
-  }
-  
-  /* Contenidor principal amb estructura de dos blocs */
-  .app-main {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    padding-top: 68px; /* Altura del títol + marge */
-  }
-  
-  /* Calendari FIX (no fa scroll) */
-  .calendar-fixed {
-    flex-shrink: 0;
-    background: var(--card);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 16px;
-    margin: 0 16px 12px 16px;
-    /* Important: evita qualsevol scroll */
-    overflow: visible;
-  }
-  
-  /* Contenidor scrollable per la resta de targetes */
-  .scrollable-content {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    padding: 0 16px 20px 16px;
-  }
-  
-  .card {
-    background: var(--card);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 16px;
-    margin-bottom: 12px;
-  }
-  
-  .card-title {
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-
-  /* NAV */
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;position:fixed;top:0;left:0;right:0;bottom:0}
+  .app-header{position:fixed;top:0;left:0;right:0;background:var(--bg);padding:12px 16px 0 16px;z-index:10}
+  h1{font-size:22px;font-weight:700;color:var(--primary);text-align:center;margin-bottom:12px}
+  .app-main{height:100%;width:100%;display:flex;flex-direction:column;padding-top:68px}
+  .calendar-fixed{flex-shrink:0;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin:0 16px 12px 16px;overflow:visible}
+  .scrollable-content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding:0 16px 20px 16px}
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:12px}
+  .card-title{font-size:14px;font-weight:700;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px}
   .nav-mes{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
   .nav-mes h2{font-size:18px;font-weight:700}
   .nav-btn{background:none;border:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--primary);cursor:pointer}
   .nav-btn:active{background:var(--primary-light)}
   .btn-avui{font-size:13px;font-weight:600;color:var(--primary);background:var(--primary-light);border:none;border-radius:20px;padding:6px 14px;cursor:pointer}
-
-  /* CALENDARI */
   .cal-caps{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px}
   .cal-cap{text-align:center;font-size:11px;font-weight:700;color:var(--text-muted);padding:4px 0}
   .cal-cap.ds{color:#F9A825} .cal-cap.dg{color:#E53935}
@@ -113,28 +39,20 @@
   .dia-num{font-size:13px;font-weight:700;line-height:1}
   .dia-punt{width:5px;height:5px;border-radius:50%;background:#E53935}
   .dia-punt.inv{background:transparent}
-
-  /* ENTRADA DE DADES */
   .controls-grid{display:grid;grid-template-columns:1fr 1px 1fr;align-items:start}
   .controls-sep{background:var(--border);min-height:80px;margin:0 10px}
   .ctrl-group{display:flex;flex-direction:column;align-items:center;gap:8px}
   .switch-row{display:flex;align-items:center;gap:6px}
   .sw-label{font-size:12px;font-weight:600}
-
-  /* Toggle */
   .toggle{position:relative;width:38px;height:22px;cursor:pointer}
   .toggle input{display:none}
   .toggle-track{position:absolute;inset:0;background:#CBD5E1;border-radius:11px;transition:background .2s}
   .toggle input:checked~.toggle-track{background:var(--primary)}
   .toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;background:#fff;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s}
   .toggle input:checked~.toggle-thumb{left:19px}
-
-  /* Botó cíclic */
   .cycle-btn{border:2px solid #BDBDBD;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;min-width:88px;text-align:center;transition:transform .1s,filter .1s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .cycle-btn:active{transform:scale(0.94);filter:brightness(0.9)}
   .cycle-btn:disabled{opacity:.35;cursor:default}
-
-  /* Valor del dia */
   .valor-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
   .valor-title{font-size:14px;font-weight:700;letter-spacing:1px;color:var(--text-muted);text-transform:uppercase;margin-bottom:12px}
   .valor-controls{display:flex;align-items:center;justify-content:center;gap:20px}
@@ -142,15 +60,10 @@
   .valor-btn{width:46px;height:46px;border-radius:50%;border:2px solid var(--primary);background:#fff;color:var(--primary);font-size:26px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s;line-height:1}
   .valor-btn:active{background:var(--primary-light)}
   .valor-btn:disabled{opacity:.3;cursor:default;border-color:#CBD5E1;color:#CBD5E1}
-
   #missatge{font-size:12px;color:#4CAF50;font-style:italic;text-align:center;min-height:18px;margin-top:8px}
   hr.dv{border:none;border-top:1px solid var(--border);margin:12px 0}
-
-  /* Registre */
   .reg-item{border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:6px;border:1px solid #BDBDBD;font-size:13px;font-weight:700;font-family:'DM Mono',monospace}
   .no-dades{font-size:13px;color:var(--text-muted);font-style:italic;text-align:center;padding:8px}
-
-  /* Comptadors */
   .comp-item{background:#F8FAFC;border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:8px}
   .comp-f1{display:flex;align-items:center;gap:8px;margin-bottom:6px}
   .comp-color{width:14px;height:14px;border-radius:4px;border:1px solid #BDBDBD;flex-shrink:0}
@@ -163,15 +76,11 @@
   .ini-input{width:60px;height:32px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:13px;font-family:'DM Mono',monospace;color:var(--text);background:#fff;outline:none}
   .ini-input:focus{border-color:var(--primary)}
   .ini-save{background:none;border:none;color:#388E3C;font-size:20px;cursor:pointer;padding:0 4px}
-
-  /* Botons acció */
   .accio-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
   .btn-accio{border:none;border-radius:10px;padding:10px 16px;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px}
   .btn-accio:active{filter:brightness(0.9)}
   .btn-esborrar{background:#EF9A9A;color:#B71C1C}
   .btn-reset{background:#FFCDD2;color:#B71C1C}
-
-  /* Modal */
   .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center;padding:20px}
   .modal-overlay.open{display:flex}
   .modal-box{background:#fff;border-radius:var(--radius);padding:24px;width:100%;max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,.18)}
@@ -185,30 +94,27 @@
 </head>
 <body>
 
-<!-- Títol fix -->
 <div class="app-header">
-  <h1>📅 Calendari Laboral</h1>
+  <h1 id="app-title">📅 Calendari Laboral</h1>
 </div>
 
 <div class="app-main">
-  <!-- Calendari FIX (sempre visible, no scrolla) -->
   <div class="calendar-fixed" id="calendarCard">
     <div class="nav-mes">
-      <button class="nav-btn" onclick="canviarMes(-1)">‹</button>
+      <button class="nav-btn" onclick="canviarMes(-1)">&#8249;</button>
       <div style="display:flex;align-items:center;gap:10px">
-        <button class="btn-avui" onclick="anarAvui()">Avui</button>
+        <button class="btn-avui" id="btn-avui" onclick="anarAvui()">Avui</button>
         <h2 id="titol-mes"></h2>
       </div>
-      <button class="nav-btn" onclick="canviarMes(1)">›</button>
+      <button class="nav-btn" onclick="canviarMes(1)">&#8250;</button>
     </div>
     <div class="cal-caps" id="cal-caps"></div>
     <div class="cal-grid" id="cal-grid"></div>
   </div>
 
-  <!-- Contingut scrollable: entrada de dades, registre, comptadors, etc. -->
   <div class="scrollable-content">
     <div class="card">
-      <div class="card-title">Entrada de dades</div>
+      <div class="card-title" id="lbl-entrada-dades">Entrada de dades</div>
       <div class="controls-grid">
         <div class="ctrl-group">
           <div class="switch-row">
@@ -216,7 +122,7 @@
               <input type="checkbox" id="chk-fons" onchange="actualitzarControls()">
               <div class="toggle-track"></div><div class="toggle-thumb"></div>
             </label>
-            <span class="sw-label">Modificar</span>
+            <span class="sw-label" id="lbl-modificar">Modificar</span>
           </div>
           <button class="cycle-btn" id="btn-fons" onclick="ciclarColor('fons')"></button>
         </div>
@@ -227,24 +133,24 @@
               <input type="checkbox" id="chk-text" onchange="actualitzarControls()">
               <div class="toggle-track"></div><div class="toggle-thumb"></div>
             </label>
-            <span class="sw-label">C. laboral</span>
+            <span class="sw-label" id="lbl-c-laboral">C. laboral</span>
           </div>
           <button class="cycle-btn" id="btn-text" onclick="ciclarColor('text')"></button>
         </div>
       </div>
       <hr class="dv">
       <div class="valor-header">
-        <span class="valor-title">MODIFCAR HORES</span>
+        <span class="valor-title" id="lbl-modificar-hores">MODIFICAR HORES</span>
         <div class="switch-row">
           <label class="toggle">
             <input type="checkbox" id="chk-valor" onchange="actualitzarControls()">
             <div class="toggle-track"></div><div class="toggle-thumb"></div>
           </label>
-          <span class="sw-label" style="font-size:11px;color:var(--text-muted)">Habilitar</span>
+          <span class="sw-label" id="lbl-habilitar" style="font-size:11px;color:var(--text-muted)">Habilitar</span>
         </div>
       </div>
       <div class="valor-controls">
-        <button class="valor-btn" id="btn-menys" onclick="canviarValor(-1)" disabled>−</button>
+        <button class="valor-btn" id="btn-menys" onclick="canviarValor(-1)" disabled>&#8722;</button>
         <span class="valor-num" id="valor-display">+8</span>
         <button class="valor-btn" id="btn-mes"   onclick="canviarValor(1)"  disabled>+</button>
       </div>
@@ -252,20 +158,20 @@
     </div>
 
     <div class="card">
-      <div class="card-title">Registre del mes</div>
+      <div class="card-title" id="lbl-registre-mes">Registre del mes</div>
       <div id="registre-llista"></div>
       <hr class="dv">
-      <div class="card-title" style="margin-top:4px">Comptadors d'hores</div>
+      <div class="card-title" id="lbl-comptadors-hores" style="margin-top:4px">Comptadors d'hores</div>
       <div id="comptadors-llista"></div>
       <hr class="dv">
       <div class="accio-row" style="margin-bottom:10px">
-        <button class="btn-accio" style="background:#C8E6C9;color:#1B5E20" onclick="exportarBackup()">💾 Exportar còpia</button>
-        <button class="btn-accio" style="background:#BBDEFB;color:#0D47A1" onclick="document.getElementById('inp-backup').click()">📂 Importar còpia</button>
+        <button class="btn-accio" style="background:#C8E6C9;color:#1B5E20" onclick="exportarBackup()">&#128190; <span id="lbl-exportar-copia">Exportar c&#242;pia</span></button>
+        <button class="btn-accio" style="background:#BBDEFB;color:#0D47A1" onclick="document.getElementById('inp-backup').click()">&#128194; <span id="lbl-importar-copia">Importar c&#242;pia</span></button>
         <input type="file" id="inp-backup" accept=".json" style="display:none" onchange="importarBackup(event)">
       </div>
       <div class="accio-row">
-        <button class="btn-accio btn-esborrar" onclick="confirmarEsborrarMes()">🗑 Esborra el mes</button>
-        <button class="btn-accio btn-reset"    onclick="confirmarReset()">💥 Reset total</button>
+        <button class="btn-accio btn-esborrar" onclick="confirmarEsborrarMes()">&#128465; <span id="lbl-esborra-mes">Esborra el mes</span></button>
+        <button class="btn-accio btn-reset"    onclick="confirmarReset()">&#128165; <span id="lbl-reset-total">Reset total</span></button>
       </div>
     </div>
   </div>
@@ -277,28 +183,162 @@
     <div class="modal-body"  id="modal-body"></div>
     <div class="modal-actions">
       <button class="modal-no" id="modal-no">No</button>
-      <button class="modal-si" id="modal-si">Sí</button>
+      <button class="modal-si" id="modal-si">S&#237;</button>
     </div>
   </div>
 </div>
 
 <script>
-const DIES_SETMANA = ['Dl','Dt','Dc','Dj','Dv','Ds','Dg'];
-const MESOS_CA = ['','Gener','Febrer','Març','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'];
 
-// Laborable → color gris per defecte. Vacances → text groc.
-const COLORS_FONS = [
-  { nom:'C.C.',      hex:'#90CAF9', tc:'#212121' },
-  { nom:'Laborable', hex:'#F5F5F5', tc:'#212121' },
-  { nom:'Ll. Disp.', hex:'#35A54D', tc:'#FFFFFF' },
-  { nom:' Fer Flexi',    hex:'#FFF59D', tc:'#212121' },
-  { nom:'Tornar Flexi',    hex:'#FFF59D', tc:'#212121' },
-  { nom:'Vacances',  hex:'#781862', tc:'#FFF59D' },
-];
-const COLORS_TEXT = [
-  { nom:'Laborable', hex:'#000000' },
-  { nom:'Festiu',    hex:'#E53935' },
-];
+// ── Detecció d'idioma pel S.O. ──
+function detectarIdioma() {
+  const lang = (navigator.language || navigator.userLanguage || 'ca').toLowerCase();
+  if (lang.startsWith('es')) return 'es';
+  return 'ca';
+}
+const IDIOMA = detectarIdioma();
+
+// ── Taula de traduccions ──
+const T = {
+  ca: {
+    titol:            '📅 Calendari Laboral',
+    avui:             'Avui',
+    entrada_dades:    'Entrada de dades',
+    modificar:        'Modificar',
+    c_laboral:        'C. laboral',
+    modificar_hores:  'MODIFICAR HORES',
+    habilitar:        'Habilitar',
+    registre_mes:     'Registre del mes',
+    comptadors_hores: "Comptadors d'hores",
+    exportar_copia:   'Exportar còpia',
+    importar_copia:   'Importar còpia',
+    esborra_mes:      'Esborra el mes',
+    reset_total:      'Reset total',
+    modal_no:         'No',
+    modal_si:         'Sí',
+    sense_dades:      'Sense dades aquest mes.',
+    hores_inicials:   'Hores inicials:',
+    des_de:           'Des de',
+    dia_prefix:       'Dia',
+    hores_sufix:      'h hores',
+    dia_restaurat:    (d)     => `✓ Dia ${d} restaurat`,
+    dia_desat:        (v)     => `✓ Dia desat ${v>=0?'+':''}${v}h`,
+    copia_exportada:  '✓ Còpia exportada',
+    copia_restaurada: '✓ Còpia restaurada',
+    mes_esborrat:     '✓ Mes esborrat',
+    memoria_esborrada:'✓ Memòria esborrada',
+    fitxer_no_valid:  '✗ Fitxer no vàlid',
+    mod_ini_tit:  (nv)       => `Modificar hores inicials de ${nv}`,
+    mod_ini_cos:  (va, vn)   => `Vols canviar de ${va>=0?'+':''}${va}h a ${vn>=0?'+':''}${vn}h?`,
+    reinit_tit:   (nv)       => `Reinicialitzar comptador ${nv}`,
+    reinit_cos:   'Segur? Les hores inicials es mantindran.',
+    esborrar_mes_tit: 'Esborrar el mes',
+    esborrar_mes_cos: (mes, any) => `Segur que vols esborrar ${mes} ${any}?`,
+    reset_tit:    'Reset total',
+    reset_cos:    'Segur que vols esborrar tota la memòria?',
+    importar_tit: 'Importar còpia de seguretat',
+    importar_cos: (data) => `Vols restaurar la còpia del ${data}? Les dades actuals es sobreescriuran.`,
+    dies:   ['Dl','Dt','Dc','Dj','Dv','Ds','Dg'],
+    mesos:  ['','Gener','Febrer','Març','Abril','Maig','Juny','Juliol','Agost','Setembre','Octubre','Novembre','Desembre'],
+    locale: 'ca-ES',
+    colors_fons: [
+      { nom:'C.C.',         hex:'#90CAF9', tc:'#212121' },
+      { nom:'Laborable',    hex:'#F5F5F5', tc:'#212121' },
+      { nom:'Ll. Disp.',    hex:'#35A54D', tc:'#FFFFFF' },
+      { nom:' Fer Flexi',   hex:'#FFF59D', tc:'#212121' },
+      { nom:'Tornar Flexi', hex:'#FFF59D', tc:'#212121' },
+      { nom:'Vacances',     hex:'#781862', tc:'#FFF59D' },
+    ],
+    colors_text: [
+      { nom:'Laborable', hex:'#000000' },
+      { nom:'Festiu',    hex:'#E53935' },
+    ],
+  },
+  es: {
+    titol:            '📅 Calendario Laboral',
+    avui:             'Hoy',
+    entrada_dades:    'Entrada de datos',
+    modificar:        'Modificar',
+    c_laboral:        'C. laboral',
+    modificar_hores:  'MODIFICAR HORAS',
+    habilitar:        'Habilitar',
+    registre_mes:     'Registro del mes',
+    comptadors_hores: 'Contadores de horas',
+    exportar_copia:   'Exportar copia',
+    importar_copia:   'Importar copia',
+    esborra_mes:      'Borrar el mes',
+    reset_total:      'Reset total',
+    modal_no:         'No',
+    modal_si:         'Sí',
+    sense_dades:      'Sin datos este mes.',
+    hores_inicials:   'Horas iniciales:',
+    des_de:           'Desde',
+    dia_prefix:       'Día',
+    hores_sufix:      'h horas',
+    dia_restaurat:    (d)     => `✓ Día ${d} restaurado`,
+    dia_desat:        (v)     => `✓ Día guardado ${v>=0?'+':''}${v}h`,
+    copia_exportada:  '✓ Copia exportada',
+    copia_restaurada: '✓ Copia restaurada',
+    mes_esborrat:     '✓ Mes borrado',
+    memoria_esborrada:'✓ Memoria borrada',
+    fitxer_no_valid:  '✗ Archivo no válido',
+    mod_ini_tit:  (nv)       => `Modificar horas iniciales de ${nv}`,
+    mod_ini_cos:  (va, vn)   => `¿Quieres cambiar de ${va>=0?'+':''}${va}h a ${vn>=0?'+':''}${vn}h?`,
+    reinit_tit:   (nv)       => `Reinicializar contador ${nv}`,
+    reinit_cos:   '¿Seguro? Las horas iniciales se mantendrán.',
+    esborrar_mes_tit: 'Borrar el mes',
+    esborrar_mes_cos: (mes, any) => `¿Seguro que quieres borrar ${mes} ${any}?`,
+    reset_tit:    'Reset total',
+    reset_cos:    '¿Seguro que quieres borrar toda la memoria?',
+    importar_tit: 'Importar copia de seguridad',
+    importar_cos: (data) => `¿Quieres restaurar la copia del ${data}? Los datos actuales se sobreescribirán.`,
+    dies:   ['Lu','Ma','Mi','Ju','Vi','Sá','Do'],
+    mesos:  ['','Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+    locale: 'es-ES',
+    colors_fons: [
+      { nom:'C.C.',         hex:'#90CAF9', tc:'#212121' },
+      { nom:'Laborable',    hex:'#F5F5F5', tc:'#212121' },
+      { nom:'L. Disp.',    hex:'#35A54D', tc:'#FFFFFF' },
+      { nom:'Hacer Flexi',   hex:'#FFF59D', tc:'#212121' },
+      { nom:'Devolver Flexi', hex:'#FFF59D', tc:'#212121' },
+      { nom:'Vacaciones',   hex:'#781862', tc:'#FFF59D' },
+    ],
+    colors_text: [
+      { nom:'Laborable', hex:'#000000' },
+      { nom:'Festivo',   hex:'#E53935' },
+    ],
+  }
+};
+
+const i18n = T[IDIOMA];
+
+// ── Aplicar textos al DOM ──
+function aplicarIdioma() {
+  document.documentElement.lang                              = IDIOMA;
+  document.title                                             = i18n.titol.replace('📅 ','');
+  document.getElementById('app-title').textContent           = i18n.titol;
+  document.getElementById('btn-avui').textContent            = i18n.avui;
+  document.getElementById('lbl-entrada-dades').textContent   = i18n.entrada_dades;
+  document.getElementById('lbl-modificar').textContent       = i18n.modificar;
+  document.getElementById('lbl-c-laboral').textContent       = i18n.c_laboral;
+  document.getElementById('lbl-modificar-hores').textContent = i18n.modificar_hores;
+  document.getElementById('lbl-habilitar').textContent       = i18n.habilitar;
+  document.getElementById('lbl-registre-mes').textContent    = i18n.registre_mes;
+  document.getElementById('lbl-comptadors-hores').textContent= i18n.comptadors_hores;
+  document.getElementById('lbl-exportar-copia').textContent  = i18n.exportar_copia;
+  document.getElementById('lbl-importar-copia').textContent  = i18n.importar_copia;
+  document.getElementById('lbl-esborra-mes').textContent     = i18n.esborra_mes;
+  document.getElementById('lbl-reset-total').textContent     = i18n.reset_total;
+  document.getElementById('modal-no').textContent            = i18n.modal_no;
+  document.getElementById('modal-si').textContent            = i18n.modal_si;
+}
+aplicarIdioma();
+
+// ── Constants ──
+const DIES_SETMANA = i18n.dies;
+const MESOS        = i18n.mesos;
+const COLORS_FONS  = i18n.colors_fons;
+const COLORS_TEXT  = i18n.colors_text;
 
 const HEX_CC      = '#90CAF9';
 const HEX_FESTIU  = '#E53935';
@@ -315,10 +355,9 @@ let navMes = _avui.getMonth() + 1;
 let navAny = _avui.getFullYear();
 let idxFons = 0, idxText = 0, valorDia = 8;
 
-// Inicialitza comptadors (sense Laborable)
 COLORS_FONS.forEach(c => {
   if (c.nom === 'Laborable') return;
-  const k = (c.nom==='+Flexi'||c.nom==='-Flexi') ? '+Flexi' : c.nom;
+  const k = (c.nom==='+Flexi'||c.nom==='-Flexi'||c.nom===' Fer Flexi'||c.nom==='Tornar Flexi') ? '+Flexi' : c.nom;
   if (!comptadors[k]) {
     comptadors[k] = { any:_avui.getFullYear(), mes:_avui.getMonth()+1, dia:_avui.getDate(), valor_inicial:0 };
   }
@@ -330,7 +369,6 @@ function desarTot() {
   localStorage.setItem('comptadors_colors',  JSON.stringify(comptadors));
 }
 
-// ── Helpers data ──
 function diesDelMes(a,m){ return new Date(a,m,0).getDate(); }
 function primerDia(a,m){ const d=new Date(a,m-1,1).getDay(); return d===0?6:d-1; }
 function diaSetmana(a,m,d){ const x=new Date(a,m-1,d).getDay(); return x===0?6:x-1; }
@@ -342,7 +380,6 @@ function esNoLab(clau, info) {
   return false;
 }
 
-// ── Càlcul comptadors ──
 function calcularCC() {
   const c = comptadors['C.C.']||{};
   let total = c.valor_inicial||0;
@@ -362,7 +399,7 @@ function calcularCC() {
 
 function calcularHores(nom) {
   if (nom==='C.C.') return calcularCC();
-  const k = (nom==='+Flexi'||nom==='-Flexi') ? '+Flexi' : nom;
+  const k = (nom==='+Flexi'||nom==='-Flexi'||nom===' Fer Flexi'||nom==='Tornar Flexi') ? '+Flexi' : nom;
   const c = comptadors[k]||{};
   let total = c.valor_inicial||0;
   const avui = new Date(); avui.setHours(0,0,0,0);
@@ -377,7 +414,6 @@ function calcularHores(nom) {
   return total;
 }
 
-// ── Controls ──
 function ciclarColor(t) {
   if (t==='fons') { idxFons=(idxFons+1)%COLORS_FONS.length; pintarBadgeFons(); }
   else            { idxText=(idxText+1)%COLORS_TEXT.length;  pintarBadgeText(); }
@@ -417,7 +453,6 @@ function pintarDisplayValor() {
   el.style.color = valorDia>=0 ? '#1976D2' : '#E53935';
 }
 
-// ── Seleccionar dia ──
 function seleccionarDia(clau) {
   const [a,m,d] = clau.split('-').map(Number);
   const dw = diaSetmana(a,m,d);
@@ -428,23 +463,24 @@ function seleccionarDia(clau) {
   const chkV = document.getElementById('chk-valor').checked;
   const nomFons = COLORS_FONS[idxFons].nom;
 
-  // Laborable → esborra
   if (chkF && nomFons==='Laborable') {
     delete memoria[clau];
-    desarTot(); mostrarMissatge(`✓ Dia ${d} restaurat`); renderTot(); return;
+    desarTot(); mostrarMissatge(i18n.dia_restaurat(d)); renderTot(); return;
   }
 
   const nouFons = chkF ? COLORS_FONS[idxFons].hex : (infoEx.fons||COLOR_DEF);
   const nomEfectiu = chkF ? nomFons : (COLORS_FONS.find(x=>x.hex===nouFons)?.nom||'');
 
   let nouText = null;
-  if (chkT) { nouText = COLORS_TEXT[idxText].nom==='Festiu' ? HEX_FESTIU : null; }
+  const nomTextActual = COLORS_TEXT[idxText].nom;
+  const esFestiu = (nomTextActual==='Festiu' || nomTextActual==='Festivo');
+  if (chkT) { nouText = esFestiu ? HEX_FESTIU : null; }
   else      { nouText = infoEx.text||null; }
 
   let val;
   if (chkV) { val = valorDia; }
-  else if (nomEfectiu==='+Flexi') { val=8; }
-  else if (nomEfectiu==='-Flexi') { val=-8; }
+  else if (nomEfectiu==='+Flexi'||nomEfectiu===' Fer Flexi') { val=8; }
+  else if (nomEfectiu==='-Flexi'||nomEfectiu==='Tornar Flexi') { val=-8; }
   else { val = (esDs||esDg||(nouText===HEX_FESTIU)) ? 8 : -8; }
 
   if (nouFons===COLOR_DEF && nouText===null) { delete memoria[clau]; }
@@ -453,10 +489,9 @@ function seleccionarDia(clau) {
     if (nouText!==null) ni.text=nouText;
     memoria[clau]=ni;
   }
-  desarTot(); mostrarMissatge(`✓ Dia desat ${val>=0?'+':''}${val}h`); renderTot();
+  desarTot(); mostrarMissatge(i18n.dia_desat(val)); renderTot();
 }
 
-// ── Navegació ──
 function canviarMes(d) {
   navMes+=d;
   if (navMes>12){navMes=1;navAny++;} if (navMes<1){navMes=12;navAny--;}
@@ -464,9 +499,8 @@ function canviarMes(d) {
 }
 function anarAvui() { const a=new Date(); navMes=a.getMonth()+1; navAny=a.getFullYear(); renderTot(); }
 
-// ── Render calendari ──
 function renderCalendari() {
-  document.getElementById('titol-mes').textContent = `${MESOS_CA[navMes]} ${navAny}`;
+  document.getElementById('titol-mes').textContent = `${MESOS[navMes]} ${navAny}`;
   const caps = document.getElementById('cal-caps');
   caps.innerHTML='';
   DIES_SETMANA.forEach((d,i)=>{
@@ -498,7 +532,6 @@ function renderCalendari() {
   }
 }
 
-// ── Render registre ──
 function renderRegistre() {
   const el=document.getElementById('registre-llista');
   el.innerHTML='';
@@ -512,18 +545,17 @@ function renderRegistre() {
       if(v!==-8&&v!==8&&v!==0) ents.push({dia:d,val:v,fons:memoria[clau].fons||COLOR_DEF});
     }
   }
-  if(!ents.length){el.innerHTML='<div class="no-dades">Sense dades aquest mes.</div>';return;}
+  if(!ents.length){el.innerHTML=`<div class="no-dades">${i18n.sense_dades}</div>`;return;}
   ents.forEach(({dia,val,fons})=>{
     const nom=h2n[fons]||'';
     const div=document.createElement('div');
     div.className='reg-item'; div.style.background=fons;
     div.style.color=(fons==='#781862')?'#FFF59D':'#212121';
-    div.textContent=`Dia ${String(dia).padStart(2,'0')}   ${val}h hores${nom?`   [${nom}]`:''}`;
+    div.textContent=`${i18n.dia_prefix} ${String(dia).padStart(2,'0')}   ${val}${i18n.hores_sufix}${nom?`   [${nom}]`:''}`;
     el.appendChild(div);
   });
 }
 
-// ── Render comptadors (sense Laborable) ──
 function renderComptadors() {
   const el=document.getElementById('comptadors-llista');
   el.innerHTML='';
@@ -533,8 +565,9 @@ function renderComptadors() {
     if(c.nom==='Laborable') return;
     if(vists.has(c.hex)) return;
     vists.add(c.hex);
-    const nv=(c.nom==='+Flexi'||c.nom==='-Flexi')?'Flexi':c.nom;
-    const k=(c.nom==='+Flexi'||c.nom==='-Flexi')?'+Flexi':c.nom;
+    const isFlexi=(c.nom==='+Flexi'||c.nom==='-Flexi'||c.nom===' Fer Flexi'||c.nom==='Tornar Flexi');
+    const nv=isFlexi?'Flexi':c.nom;
+    const k=isFlexi?'+Flexi':c.nom;
     const h=calcularHores(c.nom);
     const comp=comptadors[k]||{};
     const vi=comp.valor_inicial||0;
@@ -546,19 +579,18 @@ function renderComptadors() {
         <div class="comp-color" style="background:${c.hex}"></div>
         <span class="comp-nom">${nv}</span>
         <span class="comp-total">${sg}${h}h</span>
-        <span class="comp-data">Des de 01/01/${any}</span>
-        <button class="comp-reset" onclick="confirmarReinit('${k}','${nv}')">↺</button>
+        <span class="comp-data">${i18n.des_de} 01/01/${any}</span>
+        <button class="comp-reset" onclick="confirmarReinit('${k}','${nv}')">&#8635;</button>
       </div>
       <div class="comp-f2">
-        <label>Hores inicials:</label>
+        <label>${i18n.hores_inicials}</label>
         <input class="ini-input" id="ini-${k}" type="number" value="${vi}">
-        <button class="ini-save" onclick="confirmarDesarIni('${k}','${nv}')">✓</button>
+        <button class="ini-save" onclick="confirmarDesarIni('${k}','${nv}')">&#10003;</button>
       </div>`;
     el.appendChild(div);
   });
 }
 
-// ── Modal ──
 let _cb=null;
 function obrirModal(tit,cos,cb,perill=false){
   document.getElementById('modal-title').textContent=tit;
@@ -574,7 +606,7 @@ function confirmarDesarIni(k,nv){
   const vn=parseInt(inp.value||'0')||0;
   const va=comptadors[k]?.valor_inicial||0;
   const noOrig=document.getElementById('modal-no').onclick;
-  obrirModal(`Modificar hores inicials de ${nv}`,`Vols canviar de ${va>=0?'+':''}${va}h a ${vn>=0?'+':''}${vn}h?`,()=>{
+  obrirModal(i18n.mod_ini_tit(nv), i18n.mod_ini_cos(va,vn), ()=>{
     if(!comptadors[k]){const a=new Date();comptadors[k]={any:a.getFullYear(),mes:a.getMonth()+1,dia:a.getDate(),valor_inicial:0};}
     comptadors[k].valor_inicial=vn; desarTot(); renderComptadors();
   });
@@ -585,7 +617,7 @@ function confirmarDesarIni(k,nv){
 }
 
 function confirmarReinit(k,nv){
-  obrirModal(`Reinicialitzar comptador ${nv}`,'Segur? Les hores inicials es mantindran.',()=>{
+  obrirModal(i18n.reinit_tit(nv), i18n.reinit_cos, ()=>{
     const a=new Date();const ve=comptadors[k]?.valor_inicial||0;
     comptadors[k]={any:a.getFullYear(),mes:a.getMonth()+1,dia:a.getDate(),valor_inicial:ve};
     desarTot(); renderComptadors();
@@ -593,26 +625,25 @@ function confirmarReinit(k,nv){
 }
 
 function confirmarEsborrarMes(){
-  obrirModal('Esborrar el mes',`Segur que vols esborrar ${MESOS_CA[navMes]} ${navAny}?`,()=>{
+  obrirModal(i18n.esborrar_mes_tit, i18n.esborrar_mes_cos(MESOS[navMes], navAny), ()=>{
     Object.keys(memoria).forEach(k=>{if(k.startsWith(`${navAny}-${navMes}-`))delete memoria[k];});
-    desarTot(); mostrarMissatge('✓ Mes esborrat'); renderTot();
+    desarTot(); mostrarMissatge(i18n.mes_esborrat); renderTot();
   },true);
 }
 
 function confirmarReset(){
-  obrirModal('Reset total','Segur que vols esborrar tota la memòria?',()=>{
+  obrirModal(i18n.reset_tit, i18n.reset_cos, ()=>{
     memoria={}; comptadors={};
     const a=new Date();
     COLORS_FONS.forEach(c=>{
       if(c.nom==='Laborable')return;
-      const k=(c.nom==='+Flexi'||c.nom==='-Flexi')?'+Flexi':c.nom;
+      const k=(c.nom==='+Flexi'||c.nom==='-Flexi'||c.nom===' Fer Flexi'||c.nom==='Tornar Flexi')?'+Flexi':c.nom;
       if(!comptadors[k]) comptadors[k]={any:a.getFullYear(),mes:a.getMonth()+1,dia:a.getDate(),valor_inicial:0};
     });
-    desarTot(); mostrarMissatge('✓ Memòria esborrada'); renderTot();
+    desarTot(); mostrarMissatge(i18n.memoria_esborrada); renderTot();
   },true);
 }
 
-// ── Còpia de seguretat ──
 function exportarBackup() {
   const dades = {
     versio: 1,
@@ -627,7 +658,7 @@ function exportarBackup() {
   const nom = `backup_calendari_${ara.getFullYear()}${String(ara.getMonth()+1).padStart(2,'0')}${String(ara.getDate()).padStart(2,'0')}.json`;
   a.href = url; a.download = nom; a.click();
   URL.revokeObjectURL(url);
-  mostrarMissatge('✓ Còpia exportada');
+  mostrarMissatge(i18n.copia_exportada);
 }
 
 function importarBackup(event) {
@@ -637,24 +668,23 @@ function importarBackup(event) {
   reader.onload = (e) => {
     try {
       const dades = JSON.parse(e.target.result);
-      if (!dades.calendari_personal || !dades.comptadors_colors) throw new Error('Format invàlid');
+      if (!dades.calendari_personal || !dades.comptadors_colors) throw new Error('Format invalid');
       obrirModal(
-        'Importar còpia de seguretat',
-        `Vols restaurar la còpia del ${dades.data_exportacio ? new Date(dades.data_exportacio).toLocaleDateString('ca-ES') : 'fitxer seleccionat'}? Les dades actuals es sobreescriuran.`,
+        i18n.importar_tit,
+        i18n.importar_cos(dades.data_exportacio ? new Date(dades.data_exportacio).toLocaleDateString(i18n.locale) : fitxer.name),
         () => {
           memoria = dades.calendari_personal;
           comptadors = dades.comptadors_colors;
-          desarTot(); mostrarMissatge('✓ Còpia restaurada'); renderTot();
+          desarTot(); mostrarMissatge(i18n.copia_restaurada); renderTot();
         }, false
       );
     } catch(err) {
-      mostrarMissatge('✗ Fitxer no vàlid');
+      mostrarMissatge(i18n.fitxer_no_valid);
     }
     event.target.value = '';
   };
   reader.readAsText(fitxer);
 }
-
 
 let _mt=null;
 function mostrarMissatge(txt){
@@ -666,12 +696,11 @@ function renderTot(){ renderCalendari(); renderRegistre(); renderComptadors(); }
 
 pintarBadgeFons(); pintarBadgeText(); pintarDisplayValor(); actualitzarControls(); renderTot();
 
-// ── Swipe per canviar de mes (ara només al calendari fix) ──
+// ── Swipe per canviar de mes ──
 let touchStartX = 0;
 let touchStartY = 0;
 let isSwipingCalendar = false;
 
-// Detectar si el touch comença dins de la targeta del calendari
 document.addEventListener('touchstart', e => {
   const calendarCard = document.getElementById('calendarCard');
   const target = e.target;
@@ -686,16 +715,12 @@ document.addEventListener('touchstart', e => {
 
 document.addEventListener('touchend', e => {
   if (!isSwipingCalendar) return;
-  
   const dx = e.changedTouches[0].clientX - touchStartX;
   const dy = e.changedTouches[0].clientY - touchStartY;
-
-  // Només actua si el moviment horitzontal és dominant i prou gran
   if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-    if (dx < 0) canviarMes(1);   // llisca esquerra → mes següent
-    else        canviarMes(-1);  // llisca dreta → mes anterior
+    if (dx < 0) canviarMes(1);
+    else        canviarMes(-1);
   }
-  
   isSwipingCalendar = false;
 }, { passive: true });
 </script>
