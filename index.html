@@ -273,6 +273,7 @@ const T = {
       { nom:'Tornar Flexi', hex:'#FFE082', tc:'#212121' },
       { nom:'Vacances',     hex:'#781862', tc:'#FFF59D' },
       { nom:'Permisos',     hex:'#FFB74D', tc:'#212121' },
+      { nom:'Vac. Treb.',   hex:'#BA68C8', tc:'#212121' },
     ],
     colors_text: [
       { nom:'Laborable', hex:'#000000' },
@@ -334,6 +335,7 @@ const T = {
       { nom:'Devolver Flexi', hex:'#FFE082', tc:'#212121' },
       { nom:'Vacaciones',   hex:'#781862', tc:'#FFF59D' },
       { nom:'Permisos',     hex:'#FFB74D', tc:'#212121' },
+      { nom:'Vac. Trab.',   hex:'#BA68C8', tc:'#212121' },
     ],
     colors_text: [
       { nom:'Laborable', hex:'#000000' },
@@ -383,6 +385,7 @@ const HEX_PERMISOS    = '#FFB74D';
 const HEX_FER_FLEXI   = '#FFF59D';
 const HEX_TORNAR_FLEXI= '#FFE082';
 const HEX_LL_DISP     = '#35A54D';
+const HEX_VAC_TREB    = '#BA68C8';
 const COLOR_DEF   = '#F5F5F5';
 const COLOR_DS    = '#F9A825';
 const COLOR_DG    = '#E53935';
@@ -390,6 +393,37 @@ const COLOR_T_DEF = '#212121';
 
 let memoria    = JSON.parse(localStorage.getItem('calendari_personal') || '{}');
 let comptadors = JSON.parse(localStorage.getItem('comptadors_colors')  || '{}');
+
+function _migrarValorsAntics() {
+  if (localStorage.getItem('migracio_valors_v2')) return;
+  Object.keys(memoria).forEach(clau=>{
+    const info = memoria[clau];
+    if (!info || !info.fons) return;
+    const v = info.valor;
+    if (v!==8 && v!==-8 && v!==0) return; // preserva valors personalitzats no estandard
+    const [a,m,d] = clau.split('-').map(Number);
+    const dw = (()=>{ const x=new Date(a,m-1,d).getDay(); return x===0?6:x-1; })();
+    const esDs = dw===5, esDg = dw===6;
+    const esFestiuText = info.text===HEX_FESTIU;
+    let nouValor;
+    if (info.fons===HEX_CC) {
+      nouValor = (esDs||esDg||esFestiuText) ? 8 : -8;
+    } else if (info.fons===HEX_VAC_TREB) {
+      nouValor = -8;
+    } else if (info.fons===HEX_VACANCES && (esFestiuText||esDg)) {
+      nouValor = 0;
+    } else if (info.nomFons==='+Flexi'||info.nomFons===' Fer Flexi') {
+      nouValor = 8;
+    } else if (info.nomFons==='-Flexi'||info.nomFons==='Tornar Flexi') {
+      nouValor = -8;
+    } else {
+      nouValor = -8;
+    }
+    if (nouValor!==v) info.valor = nouValor;
+  });
+  localStorage.setItem('migracio_valors_v2','1');
+}
+_migrarValorsAntics();
 
 const _avui = new Date();
 let navMes = _avui.getMonth() + 1;
@@ -432,6 +466,7 @@ function calcularCC() {
     const info = memoria[clau]||{};
     const noLab = esNoLab(clau,info);
     if (info.fons===HEX_CC) { if (!noLab) total+=(info.valor||0); }
+    else if (info.fons===HEX_VAC_TREB) { total+=8; }
     else if (noLab && info.fons!==HEX_VACANCES && info.fons!==HEX_PERMISOS && info.fons!==HEX_LL_DISP) total+=8;
     cur.setDate(cur.getDate()+1);
   }
@@ -450,7 +485,9 @@ function calcularHores(nom) {
   Object.entries(memoria).forEach(([clau,info])=>{
     const [a,m,d] = clau.split('-').map(Number);
     const dt = new Date(a,m-1,d);
-    if (dt>=inici && dt<=avui && info.fons===hex) total+=(info.valor||0);
+    if (dt<inici || dt>avui) return;
+    if (info.fons===hex) total+=(info.valor||0);
+    else if (hex===HEX_VACANCES && info.fons===HEX_VAC_TREB) total-=8;
   });
   return total;
 }
@@ -562,6 +599,7 @@ function _calcularEntradaDia(clau) {
   else if (nomEfectiu==='+Flexi'||nomEfectiu===' Fer Flexi') { val=8; }
   else if (nomEfectiu==='-Flexi'||nomEfectiu==='Tornar Flexi') { val=-8; }
   else if (nomEfectiu==='C.C.') { val = (esDs||esDg||(nouText===HEX_FESTIU)) ? 8 : -8; }
+  else if (nouFons===HEX_VAC_TREB) { val = -8; }
   else if (nouFons===HEX_VACANCES && (nouText===HEX_FESTIU || esDg)) { val = 0; }
   else { val = -8; }
 
@@ -682,8 +720,9 @@ function renderRegistre() {
       const v=memoria[clau].valor||0;
       const fons=memoria[clau].fons||COLOR_DEF;
       const esPermisos = fons === HEX_PERMISOS_LOC;
+      const esVacTreb = fons === HEX_VAC_TREB;
       const horesNoEstandard = (v!==-8&&v!==8&&v!==0);
-      if(esPermisos || horesNoEstandard) {
+      if(esPermisos || esVacTreb || horesNoEstandard) {
         ents.push({dia:d, val:v, fons, nota:memoria[clau].nota||''});
       }
     }
@@ -709,6 +748,7 @@ function renderComptadors() {
   const vists=new Set();
   COLORS_FONS.forEach(c=>{
     if(c.nom==='Laborable') return;
+    if(c.hex===HEX_VAC_TREB) return;
     if(vists.has(c.hex)) return;
     vists.add(c.hex);
     const isFlexi=(c.nom==='+Flexi'||c.nom==='-Flexi'||c.nom===' Fer Flexi'||c.nom==='Tornar Flexi');
