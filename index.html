@@ -432,7 +432,7 @@ function calcularCC() {
     const info = memoria[clau]||{};
     const noLab = esNoLab(clau,info);
     if (info.fons===HEX_CC) { if (!noLab) total+=(info.valor||0); }
-    else if (noLab) total+=8;
+    else if (noLab && info.fons!==HEX_VACANCES && info.fons!==HEX_PERMISOS && info.fons!==HEX_LL_DISP) total+=8;
     cur.setDate(cur.getDate()+1);
   }
   return total;
