@@ -561,7 +561,9 @@ function _calcularEntradaDia(clau) {
   if (chkV) { val = valorDia; }
   else if (nomEfectiu==='+Flexi'||nomEfectiu===' Fer Flexi') { val=8; }
   else if (nomEfectiu==='-Flexi'||nomEfectiu==='Tornar Flexi') { val=-8; }
-  else { val = (esDs||esDg||(nouText===HEX_FESTIU)) ? 8 : -8; }
+  else if (nomEfectiu==='C.C.') { val = (esDs||esDg||(nouText===HEX_FESTIU)) ? 8 : -8; }
+  else if (nouFons===HEX_VACANCES && nouText===HEX_FESTIU) { val = 0; }
+  else { val = -8; }
 
   const esPermisos = chkF && (nomEfectiu === 'Permisos');
   const horesNoEstandard = chkV && valorDia !== 8;
