@@ -656,7 +656,7 @@ function renderCalendari() {
     let cF,cT;
     if(info){
       cF=info.fons||COLOR_DEF;
-      cT=info.text||(cF==='#781862'?'#FFF59D':(esDs?COLOR_DS:(esDg?COLOR_DG:COLOR_T_DEF)));
+      cT=info.text||(esDs?COLOR_DS:(esDg?COLOR_DG:(cF==='#781862'?'#FFF59D':COLOR_T_DEF)));
     } else { cF=COLOR_DEF; cT=esDs?COLOR_DS:(esDg?COLOR_DG:COLOR_T_DEF); }
     const val=info?(info.valor||0):0;
     const punt=(val!==0&&val!==8&&val!==-8);
